@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import CardComponent from '../components/CardComponent';
 import InputComponent from '../components/InputComponent';
 import colors from '../constants/colors';
@@ -22,12 +22,21 @@ export default function StartGameScreen() {
     const chosenNumber = parseInt(enteredValue);
 
     if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+      Alert.alert('Invalid number', 'Number has to be 0 to 99', [
+        { text: 'Okay', style: 'destructive', onPress: resetInputHandler },
+      ]);
       return;
     }
     setConfirmed(true);
     setSelectedNumber(chosenNumber);
     setEnteredValue('');
   };
+
+  let confirmedOutput = null;
+
+  if (confirmed) {
+    confirmedOutput = <Text>Chosen Number {selectedNumber}</Text>;
+  }
 
   return (
     <TouchableWithoutFeedback
@@ -58,6 +67,7 @@ export default function StartGameScreen() {
             </View>
           </View>
         </CardComponent>
+        {confirmedOutput}
       </View>
     </TouchableWithoutFeedback>
   );
