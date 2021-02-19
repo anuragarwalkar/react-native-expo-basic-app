@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-export default function CardComponent(props: { children: ReactNode; style?: any }) {
+export default function Card(props: { children: ReactNode; style?: any }) {
   return <View style={{ ...styles.card, ...props.style }}>{props.children}</View>;
 }
 

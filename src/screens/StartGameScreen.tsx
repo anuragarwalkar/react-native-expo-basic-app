@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
-import CardComponent from '../components/CardComponent';
-import InputComponent from '../components/InputComponent';
+import Card from '../components/Card';
+import CustomInput from '../components/CustomInput';
 import colors from '../constants/colors';
 
 export default function StartGameScreen() {
@@ -17,6 +17,8 @@ export default function StartGameScreen() {
     setConfirmed(false);
     setEnteredValue('');
   };
+
+  const onStartGame = () => {};
 
   const onConfirmInputHandler = () => {
     const chosenNumber = parseInt(enteredValue);
@@ -35,7 +37,15 @@ export default function StartGameScreen() {
   let confirmedOutput = null;
 
   if (confirmed) {
-    confirmedOutput = <Text>Chosen Number {selectedNumber}</Text>;
+    confirmedOutput = (
+      <Card style={styles.startGameContainer}>
+        <Text style={styles.startGameText}>You selected</Text>
+        <View>
+          <Text style={styles.startGameText}>{selectedNumber}</Text>
+        </View>
+        <Button onPress={onStartGame} title="Start the game" />
+      </Card>
+    );
   }
 
   return (
@@ -46,9 +56,9 @@ export default function StartGameScreen() {
     >
       <View style={styles.screen}>
         <Text style={styles.title}>Start a New Game</Text>
-        <CardComponent>
+        <Card>
           <Text>Select a Number</Text>
-          <InputComponent
+          <CustomInput
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="number-pad"
@@ -66,7 +76,7 @@ export default function StartGameScreen() {
               <Button title="Confirm" onPress={onConfirmInputHandler} color={colors.primary} />
             </View>
           </View>
-        </CardComponent>
+        </Card>
         {confirmedOutput}
       </View>
     </TouchableWithoutFeedback>
@@ -96,5 +106,12 @@ const styles = StyleSheet.create({
   input: {
     width: 50,
     textAlign: 'center',
+  },
+  startGameContainer: {
+    marginTop: 10,
+  },
+  startGameText: {
+    fontSize: 18,
+    marginBottom: 10,
   },
 });

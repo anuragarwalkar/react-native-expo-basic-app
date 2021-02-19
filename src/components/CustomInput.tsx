@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import { Styles } from '../models/styles.model';
 
-export default function InputComponent(props: { style?: Styles } | any) {
+export default function CustomInput(props: { style?: Styles } | any) {
   return (
     <View>
       <TextInput {...props} style={{ ...styles.input, ...props.style }} />
