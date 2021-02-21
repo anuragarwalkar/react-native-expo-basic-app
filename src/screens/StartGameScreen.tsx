@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import Card from '../components/Card';
 import CustomInput from '../components/CustomInput';
+import NumberContainer from '../components/NumberContainer';
 import colors from '../constants/colors';
+import defaultStyle from '../constants/defaultStyle';
+import { OPEN_SANS_BOLD } from '../constants/fonts';
 
-export default function StartGameScreen() {
+interface propsType {
+  onStartGame: (selectedNumber: number) => void;
+}
+
+export default function StartGameScreen(props: propsType) {
   const [enteredValue, setEnteredValue] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState(0);
@@ -18,8 +25,6 @@ export default function StartGameScreen() {
     setEnteredValue('');
   };
 
-  const onStartGame = () => {};
-
   const onConfirmInputHandler = () => {
     const chosenNumber = parseInt(enteredValue);
 
@@ -32,6 +37,7 @@ export default function StartGameScreen() {
     setConfirmed(true);
     setSelectedNumber(chosenNumber);
     setEnteredValue('');
+    Keyboard.dismiss();
   };
 
   let confirmedOutput = null;
@@ -40,10 +46,8 @@ export default function StartGameScreen() {
     confirmedOutput = (
       <Card style={styles.startGameContainer}>
         <Text style={styles.startGameText}>You selected</Text>
-        <View>
-          <Text style={styles.startGameText}>{selectedNumber}</Text>
-        </View>
-        <Button onPress={onStartGame} title="Start the game" />
+        <NumberContainer>{selectedNumber}</NumberContainer>
+        <Button onPress={() => props.onStartGame(selectedNumber)} title="Start the game" />
       </Card>
     );
   }
@@ -55,7 +59,7 @@ export default function StartGameScreen() {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.title}>Start a New Game</Text>
+        <Text style={{ ...styles.title, ...styles.defaultText }}>Start a New Game</Text>
         <Card>
           <Text>Select a Number</Text>
           <CustomInput
@@ -83,7 +87,7 @@ export default function StartGameScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = defaultStyle({
   screen: {
     flex: 1,
     padding: 10,
@@ -109,6 +113,7 @@ const styles = StyleSheet.create({
   },
   startGameContainer: {
     marginTop: 10,
+    width: 200,
   },
   startGameText: {
     fontSize: 18,

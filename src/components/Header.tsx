@@ -1,16 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import colors from '../constants/colors';
+import defaultStyle from '../constants/defaultStyle';
 
 export default function Header(props: { title: string }) {
   return (
-    <View style={styles.header}>
+    <View style={{ ...styles.header, ...styles.defaultText }}>
       <Text style={styles.headerTitle}>{props.title}</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = defaultStyle({
   header: {
     width: '100%',
     height: 90,
