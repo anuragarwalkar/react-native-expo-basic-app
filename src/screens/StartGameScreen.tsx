@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { View, Text, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import Card from '../components/Card';
 import CustomInput from '../components/CustomInput';
+import MainButton from '../components/MainButton';
 import NumberContainer from '../components/NumberContainer';
 import colors from '../constants/colors';
 import defaultStyle from '../constants/defaultStyle';
-import { OPEN_SANS_BOLD } from '../constants/fonts';
 
 interface propsType {
   onStartGame: (selectedNumber: number) => void;
@@ -47,7 +47,7 @@ export default function StartGameScreen(props: propsType) {
       <Card style={styles.startGameContainer}>
         <Text style={styles.startGameText}>You selected</Text>
         <NumberContainer>{selectedNumber}</NumberContainer>
-        <Button onPress={() => props.onStartGame(selectedNumber)} title="Start the game" />
+        <MainButton onPress={() => props.onStartGame(selectedNumber)}>Start Game</MainButton>
       </Card>
     );
   }
@@ -59,9 +59,9 @@ export default function StartGameScreen(props: propsType) {
       }}
     >
       <View style={styles.screen}>
-        <Text style={{ ...styles.title, ...styles.defaultText }}>Start a New Game</Text>
+        <Text style={styles.titleText}>Start a New Game</Text>
         <Card>
-          <Text>Select a Number</Text>
+          <Text style={styles.defaultText}>Select a Number</Text>
           <CustomInput
             autoCapitalize="none"
             autoCorrect={false}
@@ -103,7 +103,7 @@ const styles = defaultStyle({
   buttonStyle: {
     width: 100,
   },
-  title: {
+  titleText: {
     fontSize: 20,
     marginVertical: 10,
   },
@@ -113,7 +113,7 @@ const styles = defaultStyle({
   },
   startGameContainer: {
     marginTop: 10,
-    width: 200,
+    width: 250,
   },
   startGameText: {
     fontSize: 18,

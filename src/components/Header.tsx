@@ -5,8 +5,8 @@ import defaultStyle from '../constants/defaultStyle';
 
 export default function Header(props: { title: string }) {
   return (
-    <View style={{ ...styles.header, ...styles.defaultText }}>
-      <Text style={styles.headerTitle}>{props.title}</Text>
+    <View style={styles.header}>
+      <Text style={styles.headerTitleText}>{props.title}</Text>
     </View>
   );
 }
@@ -20,7 +20,7 @@ const styles = defaultStyle({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  headerTitle: {
+  headerTitleText: {
     color: 'white',
     fontSize: 18,
   },

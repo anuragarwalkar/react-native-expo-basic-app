@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import Card from '../components/Card';
+import MainButton from '../components/MainButton';
 import NumberContainer from '../components/NumberContainer';
 
 type GuessButtonModel = 'LOWER' | 'GREATER';
@@ -63,10 +65,14 @@ export default function GameScreen(props: { userChoise: number; onGameOver: (num
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
         <View style={styles.button}>
-          <Button title={GUESS.LOWER} onPress={() => nextGuessHandler(GUESS.LOWER)} />
+          <MainButton onPress={() => nextGuessHandler(GUESS.LOWER)}>
+            <Ionicons name="md-remove" size={24} color="white" />
+          </MainButton>
         </View>
         <View style={styles.button}>
-          <Button title={GUESS.GREATER} onPress={() => nextGuessHandler(GUESS.GREATER)} />
+          <MainButton onPress={() => nextGuessHandler(GUESS.LOWER)}>
+            <Ionicons name="md-add" size={24} color="white" />
+          </MainButton>
         </View>
       </Card>
     </View>
