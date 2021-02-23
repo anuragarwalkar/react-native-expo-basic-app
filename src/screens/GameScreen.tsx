@@ -4,7 +4,7 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import Card from '../components/Card';
 import MainButton from '../components/MainButton';
 import NumberContainer from '../components/NumberContainer';
-
+import { deviceHeight, deviceWidth, getDimensions } from '../utils/utilFunctions';
 type GuessButtonModel = 'LOWER' | 'GREATER';
 
 const GUESS = {
@@ -25,12 +25,32 @@ const generateRandomBetween = (min: number, max: number, exclude: number): numbe
   }
 };
 
-export default function GameScreen(props: { userChoise: number; onGameOver: (numberOfRounds: number) => void }) {
-  const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(1, 100, props.userChoise));
+interface GameScreenProps {
+  userChoise: number;
+  onGameOver: (numberOfRounds: number) => void;
+}
 
+const initialWidth = (_initialWidth: number) => (_initialWidth > 400 ? _initialWidth / 4 : _initialWidth / 3.5);
+
+export default function GameScreen(props: GameScreenProps) {
+  const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(1, 100, props.userChoise));
+  const [buttonWidth, setButtonWidth] = useState(initialWidth(deviceWidth));
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
   const [rounds, setRounds] = useState(0);
+
+  let removeDimentionListner: () => void;
+
+  const updateDimensions = (width: number) => {
+    setButtonWidth(initialWidth(width));
+  };
+
+  useEffect(() => {
+    removeDimentionListner = getDimensions(updateDimensions);
+    return () => {
+      removeDimentionListner();
+    };
+  });
 
   useEffect(() => {
     if (currentGuess === props.userChoise) {
@@ -59,18 +79,20 @@ export default function GameScreen(props: { userChoise: number; onGameOver: (num
     setRounds((oldState) => oldState + 1);
   };
 
+  const buttonWidthStyle = { width: buttonWidth };
+
   return (
     <View style={styles.screen}>
       <Text>Opponent's Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <View style={styles.button}>
+        <View style={buttonWidthStyle}>
           <MainButton onPress={() => nextGuessHandler(GUESS.LOWER)}>
             <Ionicons name="md-remove" size={24} color="white" />
           </MainButton>
         </View>
-        <View style={styles.button}>
-          <MainButton onPress={() => nextGuessHandler(GUESS.LOWER)}>
+        <View style={buttonWidthStyle}>
+          <MainButton onPress={() => nextGuessHandler(GUESS.GREATER)}>
             <Ionicons name="md-add" size={24} color="white" />
           </MainButton>
         </View>
@@ -88,11 +110,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 20,
-    width: 300,
-    maxWidth: '70%',
-  },
-  button: {
-    width: 100,
+    marginTop: deviceHeight > 600 ? 20 : 10,
+    width: '90%',
   },
 });

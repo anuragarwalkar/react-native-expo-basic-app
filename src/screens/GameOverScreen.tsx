@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Image, Text, View } from 'react-native';
 import colors from '../constants/colors';
 import defaultStyle from '../constants/defaultStyle';
+import { deviceHeight, deviceWidth } from '../utils/utilFunctions';
 
 export default function GameOverScreen(props: { numberOfRounds: number; userNumber: number; resetGame: () => void }) {
   return (
@@ -38,19 +39,19 @@ const styles = defaultStyle({
   subText: {
     textAlign: 'center',
     marginVertical: 10,
-    fontSize: 15,
+    fontSize: deviceHeight < 600 ? 16 : 20,
   },
   button: {
     marginTop: 10,
     width: 100,
   },
   imageContainer: {
-    width: 300,
-    height: 300,
-    borderRadius: 150,
+    width: deviceWidth * 0.7,
+    height: deviceWidth * 0.7,
+    borderRadius: (deviceWidth * 0.7) / 2,
     borderWidth: 3,
     overflow: 'hidden',
-    marginVertical: 30,
+    marginVertical: deviceHeight > 600 ? 60 : 15,
   },
   highlight: {
     color: colors.primary,

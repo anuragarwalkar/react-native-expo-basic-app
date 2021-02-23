@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   card: {
     padding: 20,
     width: 300,
-    maxWidth: '80%',
+    maxWidth: '100%',
     alignItems: 'center',
     shadowColor: 'black',
     shadowOffset: {

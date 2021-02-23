@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Platform } from 'react-native';
 import colors from '../constants/colors';
 import defaultStyle from '../constants/defaultStyle';
 
@@ -16,7 +16,7 @@ const styles = defaultStyle({
     width: '100%',
     height: 90,
     paddingTop: 36,
-    backgroundColor: colors.primary,
+    backgroundColor: Platform.OS === 'android' ? colors.primary : colors.secondary,
     alignItems: 'center',
     justifyContent: 'center',
   },
