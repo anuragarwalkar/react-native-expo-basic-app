@@ -1,8 +1,8 @@
 import AppLoading from 'expo-app-loading';
 import { loadAsync } from 'expo-font';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import MealsNavigator from './navigation/MealsNavigator';
+import { StyleSheet } from 'react-native';
+import MealsNavigator from './src/navigation/MealsNavigator';
 
 const fetchFonts = () => {
   return loadAsync({
