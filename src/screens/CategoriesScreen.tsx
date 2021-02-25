@@ -1,7 +1,6 @@
-import React, { FC, FunctionComponent } from 'react';
-import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationScreenProp } from 'react-navigation';
-import colors from '../constants/colors';
 import { CATEGORIES } from '../data/dummy';
 import Category from '../models/category';
 
@@ -17,7 +16,12 @@ const CategoriesScreen: NavStatelessComponent = (props) => {
       <TouchableOpacity
         style={styles.gridItem}
         onPress={() => {
-          props.navigation.navigate({ routeName: 'CategoriesMeals' });
+          props.navigation.navigate({
+            routeName: 'CategoriesMeals',
+            params: {
+              categoryId: item.id,
+            },
+          });
         }}
       >
         <View>
@@ -33,10 +37,6 @@ const CategoriesScreen: NavStatelessComponent = (props) => {
 
 CategoriesScreen.navigationOptions = {
   headerTitle: 'Meal Categories',
-  headerStyle: {
-    backgroundColor: colors.primaryColor,
-  },
-  headerTintColor: 'white',
 };
 
 const styles = StyleSheet.create({

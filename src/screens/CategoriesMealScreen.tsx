@@ -1,14 +1,27 @@
 import React, { FC } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import { NavigationScreenProp } from 'react-navigation';
+import { CATEGORIES } from '../data/dummy';
+import Category from '../models/category';
 
 interface CategoriesMealScreenProps {
   navigation: NavigationScreenProp<any, any>;
 }
-const CategoriesMealScreen: FC<CategoriesMealScreenProps> = (props) => {
+
+interface NavStatelessComponent extends FC<CategoriesMealScreenProps> {
+  navigationOptions?: Object;
+}
+
+const getSelectedCategory = (props: CategoriesMealScreenProps): Category => {
+  const categoryId = props.navigation.getParam('categoryId');
+  const selectedCategory = CATEGORIES.find((cat) => cat.id === categoryId);
+  return selectedCategory ? selectedCategory : new Category('', '', '');
+};
+const CategoriesMealScreen: NavStatelessComponent = (props) => {
+  const selectedCategory = getSelectedCategory(props);
   return (
     <View style={styles.screen}>
-      <Text>The Categories Meal Screen</Text>
+      <Text>The Categories {selectedCategory?.title} Meal Screen</Text>
       <Button
         title="Go to meal details"
         onPress={() => {
@@ -28,6 +41,14 @@ const CategoriesMealScreen: FC<CategoriesMealScreenProps> = (props) => {
       </View>
     </View>
   );
+};
+
+CategoriesMealScreen.navigationOptions = (navigationData: CategoriesMealScreenProps) => {
+  const { title: headerTitle } = getSelectedCategory(navigationData);
+
+  return {
+    headerTitle,
+  };
 };
 
 const styles = StyleSheet.create({
