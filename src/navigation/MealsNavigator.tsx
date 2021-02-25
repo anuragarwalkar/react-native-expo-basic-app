@@ -5,6 +5,9 @@ import colors from '../constants/colors';
 import CategoriesMealScreen from '../screens/CategoriesMealScreen';
 import CategoriesScreen from '../screens/CategoriesScreen';
 import MealDetailsScreen from '../screens/MealDetailsScreen';
+import { enableScreens } from 'react-native-screens';
+
+enableScreens();
 
 const mealsNavigator = createStackNavigator(
   {
