@@ -3,6 +3,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import colors from '../constants/colors';
+import { OPEN_SANS } from '../constants/fonts';
 import CategoriesMealScreen from '../screens/CategoriesMealScreen';
 import CategoriesScreen from '../screens/CategoriesScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
@@ -15,10 +16,13 @@ const mealStackNavigatorRouteConfig = {
     screen: MealDetailsScreen,
   },
 };
-const defaultStackNavigatorOptions = {
+export const defaultStackNavigatorOptions = {
   defaultNavigationOptions: {
     headerStyle: {
       backgroundColor: Platform.OS === 'android' ? colors.primaryColor : 'white',
+    },
+    headerTitleStyle: {
+      fontFamily: OPEN_SANS,
     },
     headerTintColor: Platform.OS === 'ios' ? colors.primaryColor : 'white',
   },

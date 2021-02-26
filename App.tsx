@@ -2,12 +2,13 @@ import AppLoading from 'expo-app-loading';
 import { loadAsync } from 'expo-font';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { OPEN_SANS, OPEN_SANS_BOLD } from './src/constants/fonts';
 import MealsNavigator from './src/navigation/MealsNavigator';
 
 const fetchFonts = () => {
   return loadAsync({
-    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+    [OPEN_SANS]: require('./assets/fonts/OpenSans-Regular.ttf'),
+    [OPEN_SANS_BOLD]: require('./assets/fonts/OpenSans-Bold.ttf'),
   });
 };
 
@@ -30,11 +31,3 @@ export default function App() {
 
   return <MealsNavigator />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-});

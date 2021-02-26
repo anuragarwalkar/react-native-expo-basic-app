@@ -6,9 +6,10 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import colors from '../constants/colors';
+import { OPEN_SANS_BOLD } from '../constants/fonts';
 import FiltersScreen from '../screens/FiltersScreen';
 import { isAndroid } from '../utils/utilityFunctions';
-import { defaultBottomNavigationRouteConfig } from './NavigationDef';
+import { defaultBottomNavigationRouteConfig, defaultStackNavigatorOptions } from './NavigationDef';
 
 enableScreens();
 
@@ -25,14 +26,39 @@ const MealsFavNavigator = isAndroid()
     })
   : createBottomTabNavigator(defaultBottomNavigationRouteConfig, defaultTabBarOptions);
 
-const FiltersNavigator = createStackNavigator({
-  Filters: FiltersScreen,
-});
+const FiltersNavigator = createStackNavigator(
+  {
+    Filters: FiltersScreen,
+  },
+  {
+    ...defaultStackNavigatorOptions,
+  }
+);
 
-const MainNavigator = createDrawerNavigator({
-  MealsFav: MealsFavNavigator,
-  Filters: FiltersNavigator,
-});
+const MainNavigator = createDrawerNavigator(
+  {
+    MealsFav: {
+      screen: MealsFavNavigator,
+      navigationOptions: {
+        drawerLabel: 'Meals',
+      },
+    },
+    Filters: {
+      screen: FiltersNavigator,
+      navigationOptions: {
+        drawerLabel: 'Filters',
+      },
+    },
+  },
+  {
+    contentOptions: {
+      activeTintColor: colors.primaryColor,
+      labelStyle: {
+        fontFamily: OPEN_SANS_BOLD,
+      },
+    },
+  }
+);
 
 LogBox.ignoreLogs(['Your project is accessing the following APIs']);
 

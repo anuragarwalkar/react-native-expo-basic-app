@@ -4,6 +4,7 @@ import { enableScreens } from 'react-native-screens';
 import { NavigationScreenProp } from 'react-navigation';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
+import { OPEN_SANS_BOLD } from '../constants/fonts';
 import { CATEGORIES } from '../data/dummy';
 import Category from '../models/category';
 import { isAndroid } from '../utils/utilityFunctions';
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   title: {
-    fontFamily: 'open-sans-bold',
+    fontFamily: OPEN_SANS_BOLD,
     fontSize: 22,
     textAlign: 'right',
   },
