@@ -33,7 +33,7 @@ export default function App() {
       <AppLoading
         startAsync={fetchFonts}
         onFinish={setIsFontLoded}
-        onError={() => console.log('error ocurred while loading the font')}
+        onError={() => console.error('error ocurred while loading the font')}
       />
     );
   }
