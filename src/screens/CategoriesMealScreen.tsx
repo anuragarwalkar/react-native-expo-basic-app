@@ -1,10 +1,14 @@
 import React, { FC } from 'react';
+import { Text, View } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { NavigationScreenProp } from 'react-navigation';
+import { useSelector } from 'react-redux';
 import MealList from '../components/MealList';
-import { CATEGORIES, MEALS } from '../data/dummy';
+import { CATEGORIES } from '../data/dummy';
 import Category from '../models/category';
 import Meal from '../models/meal';
+import RootState from '../store/rootState.model';
+import { globalStyles } from '../utils/utilityFunctions';
 
 enableScreens();
 
@@ -27,10 +31,20 @@ const getSelectedCategory = (props: CategoriesMealScreenProps): Category => {
 };
 
 const CategoriesMealScreen: NavStatelessComponent = (props) => {
+  const availableMeals = useSelector((state: RootState) => state.meals.filteredMeals);
+
   const selectedCategoryId = getCategoryId(props);
 
-  const filteredMeals = MEALS.filter((meal: Meal) => meal.categoryIds.indexOf(selectedCategoryId) >= 0);
+  const filteredMeals = availableMeals.filter((meal: Meal) => meal.categoryIds.indexOf(selectedCategoryId) >= 0);
   const displayedMeals = filteredMeals ? filteredMeals : [];
+
+  if (displayedMeals.length === 0) {
+    return (
+      <View style={globalStyles.absuluteCenter}>
+        <Text style={globalStyles.text}>No Meals Found, Maybe check Your Filters?</Text>
+      </View>
+    );
+  }
 
   return <MealList data={displayedMeals} navigation={props.navigation} />;
 };

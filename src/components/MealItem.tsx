@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { OPEN_SANS_BOLD } from '../constants/fonts';
 import Meal from '../models/meal';
-import { defaultTextStyle } from '../utils/utilityFunctions';
+import { globalStyles } from '../utils/utilityFunctions';
 
 interface MealItemProps {
   onSelectMeal: (meal: Meal) => void;
@@ -19,9 +19,9 @@ const MealItem: FC<MealItemProps> = (props) => {
           </ImageBackground>
         </View>
         <View style={{ ...styles.mealRow, ...styles.mealDetails }}>
-          <Text style={defaultTextStyle.text}>{props.meal.duration} M</Text>
-          <Text style={defaultTextStyle.text}>{props.meal.complexity.toUpperCase()}</Text>
-          <Text style={defaultTextStyle.text}>{props.meal.affordability.toUpperCase()}</Text>
+          <Text style={globalStyles.text}>{props.meal.duration} M</Text>
+          <Text style={globalStyles.text}>{props.meal.complexity.toUpperCase()}</Text>
+          <Text style={globalStyles.text}>{props.meal.affordability.toUpperCase()}</Text>
         </View>
       </View>
     </TouchableOpacity>

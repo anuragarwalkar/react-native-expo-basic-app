@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationScreenProp } from 'react-navigation';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomHeaderButton from '../components/HeaderButton';
 import { OPEN_SANS_BOLD } from '../constants/fonts';
 import Meal from '../models/meal';
-import { defaultTextStyle, deviceWidth } from '../utils/utilityFunctions';
+import { toggleFavorite } from '../store/actions/meals.action';
+import RootState from '../store/rootState.model';
+import { deviceWidth, globalStyles } from '../utils/utilityFunctions';
 
 interface MealDetailsScreenProps {
   navigation: NavigationScreenProp<any, any>;
@@ -20,7 +23,7 @@ const renderTextItem = (item: string) => (
   <Text
     key={item}
     style={{
-      ...defaultTextStyle.text,
+      ...globalStyles.text,
       marginVertical: 10,
       marginHorizontal: 20,
       borderColor: '#ccc',
@@ -34,13 +37,26 @@ const renderTextItem = (item: string) => (
 
 const MealDetailsScreen: NavStatelessComponent = (props) => {
   const meal: Meal = props.navigation.getParam('meal');
+  const favoriteMeals = useSelector((state: RootState) => state.meals.favoriteMeals);
+  const isFavorite = favoriteMeals.some((favMeal) => meal.id === favMeal.id);
+
+  const dispatch = useDispatch();
+
+  const toggleDispatch = useCallback(() => {
+    dispatch(toggleFavorite(meal));
+  }, [dispatch, meal]);
+
+  useEffect(() => {
+    props.navigation.setParams({ toggleDispatch, isFavorite });
+  }, [meal, isFavorite]);
+
   return (
     <ScrollView>
       <Image source={{ uri: meal.imageUrl }} style={styles.image} />
       <View style={styles.details}>
-        <Text style={defaultTextStyle.text}>{meal.duration} M</Text>
-        <Text style={defaultTextStyle.text}>{meal.complexity.toUpperCase()}</Text>
-        <Text style={defaultTextStyle.text}>{meal.affordability.toUpperCase()}</Text>
+        <Text style={globalStyles.text}>{meal.duration} M</Text>
+        <Text style={globalStyles.text}>{meal.complexity.toUpperCase()}</Text>
+        <Text style={globalStyles.text}>{meal.affordability.toUpperCase()}</Text>
       </View>
       <Text style={styles.title}>Ingredients</Text>
       {meal.ingredients.map(renderTextItem)}
@@ -51,18 +67,17 @@ const MealDetailsScreen: NavStatelessComponent = (props) => {
 };
 
 MealDetailsScreen.navigationOptions = (details: MealDetailsScreenProps) => {
-  const { title: headerTitle } = details.navigation.getParam('meal');
+  const meal = details.navigation.getParam('meal');
+  const isFavorite = details.navigation.getParam('isFavorite');
+  const toggleDispatch = details.navigation.getParam('toggleDispatch');
+  const iconName = isFavorite ? 'ios-star' : 'ios-star-outline';
+
+  const { title: headerTitle } = meal;
   return {
     headerTitle,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Favouite"
-          onPress={() => {
-            console.log('arnold');
-          }}
-          iconName="ios-star"
-        />
+        <Item title="Favouite" onPress={toggleDispatch} iconName={iconName} />
       </HeaderButtons>
     ),
   };

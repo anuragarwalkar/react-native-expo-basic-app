@@ -5,9 +5,14 @@ export const isAndroid = (): boolean => {
   return Platform.OS === 'android';
 };
 
-export const defaultTextStyle = StyleSheet.create({
+export const globalStyles = StyleSheet.create({
   text: {
     fontFamily: OPEN_SANS,
+  },
+  absuluteCenter: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
