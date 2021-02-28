@@ -10,11 +10,11 @@ const ProductItem: FC<ProductItemProps> = ({ product }) => {
 
   const onViewDetailsPress = () => {};
   return (
-    <View style={{ padding: 20 }}>
-      <Image source={{ uri: product.imageUrl }} style={{ width: '100%', height: 200 }} />
+    <View style={styles.container}>
+      <Image source={{ uri: product.imageUrl }} style={styles.image} />
       <Text>{product.title}</Text>
       <Text>{product.price}</Text>
-      <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+      <View style={styles.buttons}>
         <Button title="View Details" onPress={onViewDetailsPress} />
         <Button title="To Cart" onPress={onCartPress} />
       </View>
@@ -22,6 +22,10 @@ const ProductItem: FC<ProductItemProps> = ({ product }) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: { padding: 20 },
+  image: { width: '100%', height: 200 },
+  buttons: { flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' },
+});
 
 export default ProductItem;
