@@ -1,4 +1,4 @@
-import Product from '../../models/product.model';
+import Product from '../../models/Product.class';
 
 export const ADD_TO_CART = 'ADD_TO_CART';
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';

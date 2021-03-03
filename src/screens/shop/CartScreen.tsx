@@ -5,11 +5,16 @@ import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/Colors';
 import { OPEN_SANS_BOLD } from '../../constants/Fonts';
 import { removeFromCart } from '../../store/actions/cart.actions';
+import { addOrder } from '../../store/actions/order.actions';
 import RootState from '../../store/rootState.model';
 
 const CartScreen = () => {
   const { totalAmount, items } = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
+
+  const onOderNowPress = () => {
+    dispatch(addOrder(items, totalAmount));
+  };
 
   return (
     <View style={styles.screen}>
@@ -17,7 +22,7 @@ const CartScreen = () => {
         <Text style={styles.summaryText}>
           Total: <Text style={styles.amount}>${totalAmount}</Text>
         </Text>
-        <Button color={Colors.accent} disabled={items.length === 0} title="Order Now" onPress={() => {}} />
+        <Button color={Colors.accent} disabled={items.length === 0} title="Order Now" onPress={onOderNowPress} />
       </View>
       <View>
         <FlatList

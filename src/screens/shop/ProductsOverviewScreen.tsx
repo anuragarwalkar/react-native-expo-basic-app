@@ -6,7 +6,7 @@ import { NavigationStackProp } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
-import Product from '../../models/product.model';
+import Product from '../../models/Product.class';
 import { addToCart } from '../../store/actions/cart.actions';
 import RootState from '../../store/rootState.model';
 import { isAndroid } from '../../utils/utilityFunctions';

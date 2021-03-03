@@ -4,7 +4,7 @@ import { NavigationComponent } from 'react-navigation';
 import { NavigationStackProp, NavigationStackScreenProps } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
-import Product from '../../models/product.model';
+import Product from '../../models/Product.class';
 import { addToCart } from '../../store/actions/cart.actions';
 import RootState from '../../store/rootState.model';
 

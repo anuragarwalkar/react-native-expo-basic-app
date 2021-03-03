@@ -1,6 +1,6 @@
 import CartItem from '../../models/CartItem';
-import CartState from '../../models/cartState.model';
-import Product from '../../models/product.model';
+import Product from '../../models/Product.class';
+import CartState from '../../models/store/cartState.model';
 import { ADD_TO_CART, CartActionType, REMOVE_FROM_CART } from '../actions/cart.actions';
 
 const initialState: CartState = {

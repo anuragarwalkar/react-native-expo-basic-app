@@ -4,15 +4,17 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { OPEN_SANS, OPEN_SANS_BOLD } from './src/constants/Fonts';
 import ShopNavigator from './src/navigation/ShopNavigator';
 import cartReducer from './src/store/reducers/cart.reducer';
+import ordersReducer from './src/store/reducers/orders.reducer';
 import productReducer from './src/store/reducers/product.reducer';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 const rootStore = combineReducers({
   products: productReducer,
   cart: cartReducer,
+  orders: ordersReducer,
 });
 
 const fetchFonts = () => {

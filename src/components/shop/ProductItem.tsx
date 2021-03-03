@@ -3,7 +3,7 @@ import { Button, Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpac
 import { NavigationScreenComponent } from 'react-navigation';
 import Colors from '../../constants/Colors';
 import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
-import Product from '../../models/product.model';
+import Product from '../../models/Product.class';
 import { isAndroid } from '../../utils/utilityFunctions';
 
 interface ProductItemProps {
