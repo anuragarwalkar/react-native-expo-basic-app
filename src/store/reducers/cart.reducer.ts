@@ -2,6 +2,7 @@ import CartItem from '../../models/CartItem';
 import Product from '../../models/Product.class';
 import CartState from '../../models/store/cartState.model';
 import { ADD_TO_CART, CartActionType, REMOVE_FROM_CART } from '../actions/cart.actions';
+import { ADD_ORDER } from '../actions/order.actions';
 
 const initialState: CartState = {
   items: [],
@@ -67,6 +68,12 @@ export default (state = initialState, action: action): CartState => {
         ...state,
         items,
         totalAmount,
+      };
+    }
+
+    case ADD_ORDER: {
+      return {
+        ...initialState,
       };
     }
 

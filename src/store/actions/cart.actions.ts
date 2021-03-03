@@ -19,4 +19,4 @@ export const removeFromCart = (productId: string) => {
   };
 };
 
-export type CartActionType = 'ADD_TO_CART' | 'REMOVE_FROM_CART';
+export type CartActionType = 'ADD_ORDER' | 'ADD_TO_CART' | 'REMOVE_FROM_CART';

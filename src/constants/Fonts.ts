@@ -1,2 +1,2 @@
-export const OPEN_SANS = 'OPEN_SANS';
-export const OPEN_SANS_BOLD = 'OPEN_SANS_BOLD';
+export const OPEN_SANS = 'open-sans';
+export const OPEN_SANS_BOLD = 'open-sans-bold';
