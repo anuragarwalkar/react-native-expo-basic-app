@@ -1,15 +1,13 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 import { NavigationComponent } from 'react-navigation';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
-import CustomHeaderButton from '../../components/UI/HeaderButton';
+import CustomMenu from '../../components/UI/CustomMenu';
 import Product from '../../models/Product.class';
 import { addToCart } from '../../store/actions/cart.actions';
 import RootState from '../../store/rootState.model';
-import { isAndroid } from '../../utils/utilityFunctions';
 
 type ProductsOverviewScreenProps = {};
 
@@ -40,19 +38,13 @@ const ProductsOverviewScreen: NavigationComponent<{}, {}> = ({ navigation }: Pro
   );
 };
 
-ProductsOverviewScreen.navigationOptions = (navData: Props) => {
+ProductsOverviewScreen.navigationOptions = (navData: any) => {
+  const toggleDrawer = navData.navigation.toggleDrawer;
   return {
     headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="cart"
-          iconName={isAndroid ? 'md-cart' : 'ios-cart'}
-          onPress={() => {
-            navData.navigation.navigate({ routeName: 'Cart' });
-          }}
-        ></Item>
-      </HeaderButtons>
+      <CustomMenu title="Cart" icon="cart" onPress={() => navData.navigation.navigate({ routeName: 'Cart' })} />
     ),
+    headerLeft: () => <CustomMenu title="Menu" icon="menu" onPress={toggleDrawer} />,
   };
 };
 

@@ -1,3 +1,6 @@
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { LogBox } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -10,15 +13,13 @@ import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import { isAndroid } from '../utils/utilityFunctions';
 
 const defaultNavigationOptions = {
-  defaultNavigationOptions: {
-    headerStyle: {
-      backgroundColor: isAndroid ? Colors.primary : '',
-    },
-    headerTitleStyle: {
-      fontFamily: OPEN_SANS_BOLD,
-    },
-    headerTintColor: isAndroid ? 'white' : Colors.primary,
+  headerStyle: {
+    backgroundColor: isAndroid ? Colors.primary : '',
   },
+  headerTitleStyle: {
+    fontFamily: OPEN_SANS_BOLD,
+  },
+  headerTintColor: isAndroid ? 'white' : Colors.primary,
 };
 
 const ProductsNavigator = createStackNavigator(
@@ -36,20 +37,42 @@ const ProductsNavigator = createStackNavigator(
       screen: CartScreen,
     },
   },
-  defaultNavigationOptions
+  {
+    defaultNavigationOptions,
+  }
 );
 
 const OrdersNavigator = createStackNavigator(
   {
-    Orders: OrdersScreen,
+    Orders: {
+      screen: OrdersScreen,
+    },
   },
-  defaultNavigationOptions
+  {
+    defaultNavigationOptions,
+  }
 );
 
 const DrawerNavigator = createDrawerNavigator(
   {
-    Products: ProductsNavigator,
-    orders: OrdersNavigator,
+    Products: {
+      screen: ProductsNavigator,
+      navigationOptions: {
+        drawerLabel: 'Products',
+        drawerIcon: (drawerConfig) => {
+          return <Ionicons name={isAndroid ? 'md-list' : 'ios-list'} size={23} color={drawerConfig.tintColor} />;
+        },
+      },
+    },
+    orders: {
+      screen: OrdersNavigator,
+      navigationOptions: {
+        drawerLabel: 'Orders',
+        drawerIcon: (drawerConfig) => {
+          return <Ionicons name={isAndroid ? 'md-create' : 'ios-create'} size={23} color={drawerConfig.tintColor} />;
+        },
+      },
+    },
   },
   {
     contentOptions: {
@@ -57,5 +80,7 @@ const DrawerNavigator = createDrawerNavigator(
     },
   }
 );
+
+LogBox.ignoreLogs(['Your project is accessing the following APIs']);
 
 export default createAppContainer(DrawerNavigator);
