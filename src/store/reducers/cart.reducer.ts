@@ -1,7 +1,7 @@
 import CartItem from '../../models/CartItem';
 import CartState from '../../models/cartState.model';
 import Product from '../../models/product.model';
-import { ADD_TO_CART, CartActionType } from '../actions/cart.actions';
+import { ADD_TO_CART, CartActionType, REMOVE_FROM_CART } from '../actions/cart.actions';
 
 const initialState: CartState = {
   items: [],
@@ -12,8 +12,11 @@ interface action {
   type: CartActionType;
   payload: {
     product: Product;
+    productId: string;
   };
 }
+
+const defaultSorting = (a: CartItem, b: CartItem) => (a.id > b.id ? 1 : -1);
 
 export default (state = initialState, action: action): CartState => {
   switch (action.type) {
@@ -22,13 +25,49 @@ export default (state = initialState, action: action): CartState => {
       const oldItems = [...state.items];
       const oldItemIndex = oldItems.findIndex((item) => item.id === id);
       const quantity = oldItemIndex >= 0 ? oldItems[oldItemIndex].quantity + 1 : 1;
-      oldItems.splice(oldItemIndex, 1);
+      if (oldItemIndex != -1) {
+        oldItems.splice(oldItemIndex, 1);
+      }
       const sum = price * quantity;
       const items = [...oldItems, new CartItem(id, price, title, quantity, sum)];
       const totalAmount = items.reduce((prev, { sum: oldSum }) => prev + oldSum, 0);
       const newState = { ...state, items, totalAmount };
-      console.log(newState);
+      items.sort(defaultSorting);
       return newState;
+    }
+
+    case REMOVE_FROM_CART: {
+      const { productId } = action.payload;
+      let totalAmount = 0;
+      const clonedItems = [...state.items];
+      const items: CartItem[] = [];
+
+      for (const item of clonedItems) {
+        const toBeRemoved = item.id === productId;
+        const isHavingMultipleItems = item.quantity > 1;
+
+        if (toBeRemoved && isHavingMultipleItems) {
+          const totalQuantity = item.quantity;
+          item.sum = item.sum / totalQuantity;
+          item.quantity--;
+        }
+
+        if (toBeRemoved && !isHavingMultipleItems) {
+          continue;
+        }
+
+        totalAmount = item.sum;
+
+        items.push(item);
+      }
+
+      items.sort(defaultSorting);
+
+      return {
+        ...state,
+        items,
+        totalAmount,
+      };
     }
 
     default: {

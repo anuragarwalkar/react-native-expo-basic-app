@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { NavigationScreenComponent } from 'react-navigation';
-import Colors from '../constants/Colors';
-import { OPEN_SANS, OPEN_SANS_BOLD } from '../constants/Fonts';
-import Product from '../models/product.model';
-import { isAndroid } from '../utils/utilityFunctions';
+import Colors from '../../constants/Colors';
+import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
+import Product from '../../models/product.model';
+import { isAndroid } from '../../utils/utilityFunctions';
 
 interface ProductItemProps {
   product: Product;

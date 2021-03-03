@@ -2,6 +2,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import Colors from '../constants/Colors';
 import { OPEN_SANS_BOLD } from '../constants/Fonts';
+import CartScreen from '../screens/shop/CartScreen';
 import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import { isAndroid } from '../utils/utilityFunctions';
@@ -16,6 +17,9 @@ const ProductsNavigator = createStackNavigator(
     },
     ProductDetails: {
       screen: ProductDetailsScreen,
+    },
+    Cart: {
+      screen: CartScreen,
     },
   },
   {

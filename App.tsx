@@ -8,6 +8,7 @@ import { OPEN_SANS, OPEN_SANS_BOLD } from './src/constants/Fonts';
 import ShopNavigator from './src/navigation/ShopNavigator';
 import cartReducer from './src/store/reducers/cart.reducer';
 import productReducer from './src/store/reducers/product.reducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const rootStore = combineReducers({
   products: productReducer,
@@ -21,7 +22,7 @@ const fetchFonts = () => {
   });
 };
 
-const state = createStore(rootStore);
+const state = createStore(rootStore, composeWithDevTools());
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
