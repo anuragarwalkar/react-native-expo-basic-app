@@ -21,11 +21,15 @@ const OrderItem: FC<{ item: Order }> = ({ item }) => {
       </View>
       <View style={globalStyles.absuluteCenter}>
         <View style={{ width: 140 }}>
-          <Button color={Colors.primary} title="Show Details" onPress={onShowDetails} />
+          <Button
+            color={Colors.primary}
+            title={showDetails ? 'Hide Details' : 'Show Details'}
+            onPress={onShowDetails}
+          />
         </View>
       </View>
       {showDetails && (
-        <View>
+        <View style={styles.fullWidth}>
           {item.items.map((cartItem) => {
             return <CartItem key={cartItem.id} item={cartItem} onRemove={() => {}} />;
           })}
@@ -51,6 +55,7 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 15,
   },
+  fullWidth: { width: '100%' },
   summary: {
     flexDirection: 'row',
     justifyContent: 'space-between',

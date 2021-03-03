@@ -9,8 +9,9 @@ import { isAndroid } from '../../utils/utilityFunctions';
 interface CartItemProps {
   item: CartItemModel;
   onRemove: () => void;
+  deletable?: boolean;
 }
-const CartItem: FC<CartItemProps> = ({ item, onRemove }) => {
+const CartItem: FC<CartItemProps> = ({ item, deletable = false, onRemove }) => {
   return (
     <View style={styles.cartItem}>
       <Text style={styles.cartData}>
@@ -18,9 +19,11 @@ const CartItem: FC<CartItemProps> = ({ item, onRemove }) => {
       </Text>
       <View style={styles.cartData}>
         <Text style={styles.amount}>${item.sum}</Text>
-        <TouchableOpacity style={styles.deleteButton} onPress={onRemove}>
-          <Ionicons name={isAndroid ? 'md-trash' : 'ios-trash'} size={23} color={'red'} />
-        </TouchableOpacity>
+        {deletable && (
+          <TouchableOpacity style={styles.deleteButton} onPress={onRemove}>
+            <Ionicons name={isAndroid ? 'md-trash' : 'ios-trash'} size={23} color={'red'} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -35,8 +38,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 20,
     marginBottom: 10,
+    borderRadius: 10,
+    marginHorizontal: 10,
   },
   cartData: {
     flexDirection: 'row',
