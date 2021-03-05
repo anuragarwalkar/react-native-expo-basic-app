@@ -3,6 +3,7 @@ import Product from '../../models/Product.class';
 import CartState from '../../models/store/cartState.model';
 import { ADD_TO_CART, CartActionType, REMOVE_FROM_CART } from '../actions/cart.actions';
 import { ADD_ORDER } from '../actions/order.actions';
+import { DELETE_PRODUCT } from '../actions/product.actions';
 
 const initialState: CartState = {
   items: [],
@@ -74,6 +75,27 @@ export default (state = initialState, action: action): CartState => {
     case ADD_ORDER: {
       return {
         ...initialState,
+      };
+    }
+
+    case DELETE_PRODUCT: {
+      const productId: string = action.payload.productId;
+      const items = [];
+      let totalAmount = 0;
+
+      for (const item of state.items) {
+        if (item.id === productId) {
+          continue;
+        }
+
+        items.push(item);
+        totalAmount += item.sum;
+      }
+
+      return {
+        ...state,
+        items,
+        totalAmount,
       };
     }
 

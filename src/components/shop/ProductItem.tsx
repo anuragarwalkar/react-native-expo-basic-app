@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { NavigationScreenComponent } from 'react-navigation';
-import Colors from '../../constants/Colors';
 import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
 import Product from '../../models/Product.class';
 import { isAndroid } from '../../utils/utilityFunctions';
@@ -12,7 +11,7 @@ interface ProductItemProps {
   addToCart: () => void;
 }
 
-const ProductItem: NavigationScreenComponent<{}, ProductItemProps> = ({ product, viewDetails, addToCart }) => {
+const ProductItem: NavigationScreenComponent<{}, ProductItemProps> = ({ product, viewDetails, children }) => {
   const products = (
     <View style={styles.container}>
       <Image source={{ uri: product.imageUrl }} style={styles.image} />
@@ -20,10 +19,7 @@ const ProductItem: NavigationScreenComponent<{}, ProductItemProps> = ({ product,
         <Text style={styles.title}>{product.title}</Text>
         <Text style={styles.price}>${product.price.toFixed(2)}</Text>
       </View>
-      <View style={styles.buttons}>
-        <Button color={Colors.primary} title="View Details" onPress={viewDetails} />
-        <Button color={Colors.primary} title="To Cart" onPress={addToCart} />
-      </View>
+      <View style={styles.buttons}>{children}</View>
     </View>
   );
 

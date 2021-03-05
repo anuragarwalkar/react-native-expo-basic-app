@@ -10,6 +10,8 @@ import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
+import EditProduct from '../screens/user/EditProduct';
+import UserProducts from '../screens/user/UserProducts';
 import { isAndroid } from '../utils/utilityFunctions';
 
 const defaultNavigationOptions = {
@@ -53,6 +55,20 @@ const OrdersNavigator = createStackNavigator(
   }
 );
 
+const AdminNavigator = createStackNavigator(
+  {
+    Admin: {
+      screen: UserProducts,
+    },
+    EditProduct: {
+      screen: EditProduct,
+    },
+  },
+  {
+    defaultNavigationOptions,
+  }
+);
+
 const DrawerNavigator = createDrawerNavigator(
   {
     Products: {
@@ -60,14 +76,23 @@ const DrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Products',
         drawerIcon: (drawerConfig) => {
+          return <Ionicons name={isAndroid ? 'md-cart' : 'ios-cart'} size={23} color={drawerConfig.tintColor} />;
+        },
+      },
+    },
+    Orders: {
+      screen: OrdersNavigator,
+      navigationOptions: {
+        drawerLabel: 'Orders',
+        drawerIcon: (drawerConfig) => {
           return <Ionicons name={isAndroid ? 'md-list' : 'ios-list'} size={23} color={drawerConfig.tintColor} />;
         },
       },
     },
-    orders: {
-      screen: OrdersNavigator,
+    Admin: {
+      screen: AdminNavigator,
       navigationOptions: {
-        drawerLabel: 'Orders',
+        drawerLabel: 'Admin*',
         drawerIcon: (drawerConfig) => {
           return <Ionicons name={isAndroid ? 'md-create' : 'ios-create'} size={23} color={drawerConfig.tintColor} />;
         },

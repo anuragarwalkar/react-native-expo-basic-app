@@ -1,10 +1,11 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { Button, FlatList } from 'react-native';
 import { NavigationComponent } from 'react-navigation';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import CustomMenu from '../../components/UI/CustomMenu';
+import Colors from '../../constants/Colors';
 import Product from '../../models/Product.class';
 import { addToCart } from '../../store/actions/cart.actions';
 import RootState from '../../store/rootState.model';
@@ -28,11 +29,10 @@ const ProductsOverviewScreen: NavigationComponent<{}, {}> = ({ navigation }: Pro
     <FlatList
       data={availableProducts}
       renderItem={(product) => (
-        <ProductItem
-          viewDetails={() => onViewDetails(product.item)}
-          addToCart={() => onAddToCart(product.item)}
-          product={product.item}
-        />
+        <ProductItem viewDetails={() => onViewDetails(product.item)} product={product.item}>
+          <Button color={Colors.primary} title="View Details" onPress={() => onViewDetails(product.item)} />
+          <Button color={Colors.primary} title="To Cart" onPress={() => onAddToCart(product.item)} />
+        </ProductItem>
       )}
     />
   );

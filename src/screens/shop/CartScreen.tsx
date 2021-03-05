@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { NavigationComponent } from 'react-navigation';
+import { NavigationStackProp } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/Colors';
@@ -8,12 +10,21 @@ import { removeFromCart } from '../../store/actions/cart.actions';
 import { addOrder } from '../../store/actions/order.actions';
 import RootState from '../../store/rootState.model';
 
-const CartScreen = () => {
+type Props = {
+  navigation: NavigationStackProp<{}>;
+};
+
+const CartScreen: NavigationComponent<{}, {}> = (props: Props) => {
   const { totalAmount, items } = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
 
   const onOderNowPress = () => {
     dispatch(addOrder(items, totalAmount));
+    props.navigation.navigate({ routeName: 'Orders' });
+  };
+
+  const onRemove = (id: string) => {
+    dispatch(removeFromCart(id));
   };
 
   return (
@@ -28,13 +39,7 @@ const CartScreen = () => {
         <FlatList
           data={items}
           renderItem={(cartItem) => (
-            <CartItem
-              deletable
-              onRemove={() => {
-                dispatch(removeFromCart(cartItem.item.id));
-              }}
-              item={cartItem.item}
-            />
+            <CartItem deletable onRemove={() => onRemove(cartItem.item.id)} item={cartItem.item} />
           )}
         />
       </View>
