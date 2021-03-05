@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FlatList } from 'react-native';
+import { Alert, Button, FlatList } from 'react-native';
 import { NavigationComponent } from 'react-navigation';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,19 +15,26 @@ const UserProducts: NavigationComponent<{}, {}> = (props: NavigationStackScreenP
   const onEditPress = (productId: string) => {
     props.navigation.navigate({ routeName: 'EditProduct', params: { productId } });
   };
+
+  const deleteProductHandler = (id: string) => {
+    Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
+      { text: 'No', style: 'default' },
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: () => {
+          dispatch(deleteProduct(id));
+        },
+      },
+    ]);
+  };
   return (
     <FlatList
       data={userProducts}
       renderItem={(userProduct) => (
         <ProductItem product={userProduct.item} viewDetails={() => onEditPress(userProduct.item.id)}>
           <Button color={Colors.primary} title="Edit*" onPress={() => onEditPress(userProduct.item.id)} />
-          <Button
-            color={Colors.primary}
-            title="Delete"
-            onPress={() => {
-              dispatch(deleteProduct(userProduct.item.id));
-            }}
-          />
+          <Button color={Colors.primary} title="Delete" onPress={() => deleteProductHandler(userProduct.item.id)} />
         </ProductItem>
       )}
     />
