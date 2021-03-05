@@ -65,7 +65,7 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
       dispatch(updateProduct(productId, newProduct));
     }
 
-    props.navigation.navigate({ routeName: 'Products' });
+    props.navigation.goBack();
     setFormValues(formDataInitialState);
   }, [formValues]);
 
