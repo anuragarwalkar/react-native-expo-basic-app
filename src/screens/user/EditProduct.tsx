@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationComponent } from 'react-navigation';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
@@ -17,6 +17,7 @@ const convertObjectToArray = (formValues: FormData): FormDataItem[] =>
 const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenProps) => {
   const productId = props.navigation.getParam('productId');
   const dispatch = useDispatch();
+  const [isFormInvalid, setIsFormInvalid] = useState(false);
   const products: Product[] = useSelector((rootState: RootState) => rootState.products.userProducts);
   let product: Product;
   const isEditScreen = productId !== undefined;
@@ -36,18 +37,55 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
   const formControls = convertObjectToArray(formValues);
 
   const onSetTextValue = (value: string, property: string) => {
-    setFormValues((oldFormValues: FormData) => {
+    const isValid = value.trim().length > 0;
+    const touched = true;
+
+    const setText = (oldFormValues: FormData) => {
       return {
         ...oldFormValues,
         [property]: {
           ...oldFormValues[property],
           value,
+          isValid,
+          touched,
         },
       };
-    });
+    };
+
+    setFormValues(setText);
+  };
+
+  const isAllFormInvalid = () => {
+    let isInvalid = false;
+    for (let control in formValues) {
+      if (!formValues[control].isValid) {
+        isInvalid = true;
+        break;
+      }
+    }
+    setIsFormInvalid(isInvalid);
+    return isInvalid;
+  };
+
+  const validateInput = (property: string) => {
+    const setText = (oldFormValues: FormData) => {
+      return {
+        ...oldFormValues,
+        [property]: {
+          ...oldFormValues[property],
+          touched: true,
+        },
+      };
+    };
+
+    setFormValues(setText);
   };
 
   const submitHandler = useCallback(() => {
+    if (isAllFormInvalid()) {
+      Alert.alert('Wrong input!', 'Please check the Error message', [{ text: 'ok' }]);
+      return;
+    }
     const { title, description, price, imageUrl }: FormData = formValues;
 
     const newProduct = new Product(
@@ -83,8 +121,15 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
               <TextInput
                 style={styles.textInput}
                 value={item.value}
+                keyboardType={item.keyboradType}
                 onChangeText={(text) => onSetTextValue(text, item.alise)}
+                autoCapitalize="sentences"
+                autoCorrect
+                onBlur={() => validateInput(item.alise)}
               />
+              {((item.touched && !item.isValid) || (isFormInvalid && !item.isValid)) && (
+                <Text style={{ color: 'red' }}>Please Enter A Valid Text!</Text>
+              )}
             </View>
           </View>
         ))}
