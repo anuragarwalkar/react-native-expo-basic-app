@@ -128,7 +128,9 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
                 onBlur={() => validateInput(item.alise)}
               />
               {((item.touched && !item.isValid) || (isFormInvalid && !item.isValid)) && (
-                <Text style={{ color: 'red' }}>Please Enter A Valid Text!</Text>
+                <Text
+                  style={{ color: 'red', paddingTop: 5, paddingHorizontal: 5 }}
+                >{`Please enter a valid ${item.title} !`}</Text>
               )}
             </View>
           </View>
