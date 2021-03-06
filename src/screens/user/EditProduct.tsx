@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationComponent } from 'react-navigation';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomMenu from '../../components/UI/CustomMenu';
-import { OPEN_SANS_BOLD } from '../../constants/Fonts';
+import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
 import Product from '../../models/Product.class';
 import { createProduct, updateProduct } from '../../store/actions/product.actions';
 import RootState from '../../store/rootState.model';
@@ -115,7 +115,7 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
     <ScrollView>
       <View style={styles.form}>
         {formControls.map((item: FormDataItem) => (
-          <View key={item.id}>
+          <KeyboardAvoidingView key={item.id} style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={100}>
             <View style={styles.formControl}>
               <Text style={styles.title}>{item.title}</Text>
               <TextInput
@@ -128,12 +128,10 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
                 onBlur={() => validateInput(item.alise)}
               />
               {((item.touched && !item.isValid) || (isFormInvalid && !item.isValid)) && (
-                <Text
-                  style={{ color: 'red', paddingTop: 5, paddingHorizontal: 5 }}
-                >{`Please enter a valid ${item.title} !`}</Text>
+                <Text style={styles.errorText}>{`Please enter a valid ${item.title} !`}</Text>
               )}
             </View>
-          </View>
+          </KeyboardAvoidingView>
         ))}
       </View>
     </ScrollView>
@@ -158,6 +156,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
   },
+  errorText: { color: 'red', fontFamily: OPEN_SANS, paddingTop: 5, paddingHorizontal: 5 },
   title: {
     fontFamily: OPEN_SANS_BOLD,
     marginVertical: 8,
