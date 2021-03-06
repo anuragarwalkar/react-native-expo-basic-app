@@ -8,6 +8,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxThunk from 'redux-thunk';
 import { OPEN_SANS, OPEN_SANS_BOLD } from './src/constants/Fonts';
 import ShopNavigator from './src/navigation/ShopNavigator';
+import authReducer from './src/store/reducers/auth.reducer';
 import cartReducer from './src/store/reducers/cart.reducer';
 import ordersReducer from './src/store/reducers/orders.reducer';
 import productReducer from './src/store/reducers/product.reducer';
@@ -16,6 +17,7 @@ const rootStore = combineReducers({
   products: productReducer,
   cart: cartReducer,
   orders: ordersReducer,
+  auth: authReducer,
 });
 
 const fetchFonts = () => {

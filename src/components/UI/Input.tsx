@@ -36,7 +36,7 @@ const inputReducer = (state: any, action: any) => {
 
 interface inputProps extends TextInputProps {
   initialValue?: string;
-  onInputChange: (id?: string, value?: string, isValid?: boolean) => void;
+  onInputChange: (id: string, value: string, isValid: boolean) => void;
   initiallyValid?: boolean;
   required?: boolean;
   email?: boolean;
