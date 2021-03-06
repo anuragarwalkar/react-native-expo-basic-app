@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
+import Card from '../../components/shop/Card';
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/Colors';
 import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
@@ -14,7 +15,7 @@ const OrderItem: FC<{ item: Order }> = ({ item }) => {
   };
 
   return (
-    <View style={styles.orderItem}>
+    <Card style={styles.orderItem}>
       <View style={styles.summary}>
         <Text style={styles.totalAmount}>${item.totalAmount}</Text>
         <Text style={styles.date}>{item.getReadableDate()}</Text>
@@ -35,23 +36,13 @@ const OrderItem: FC<{ item: Order }> = ({ item }) => {
           })}
         </View>
       )}
-    </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   orderItem: {
-    shadowColor: 'black',
     paddingBottom: 10,
-    shadowOpacity: 0.26,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
     margin: 20,
     padding: 15,
   },

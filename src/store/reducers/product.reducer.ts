@@ -1,19 +1,17 @@
-import { PRODUCTS } from '../../data/dummy-data';
 import Product from '../../models/Product.class';
 import ProductState from '../../models/store/productState.model';
-import { CREATE_PRODUCT, DELETE_PRODUCT, UPDATE_PRODUCT } from '../actions/product.actions';
-
-const USER_PRODUCTS = PRODUCTS.filter((product) => product.ownerId === 'u1');
+import { CREATE_PRODUCT, DELETE_PRODUCT, SET_PRODUCTS, UPDATE_PRODUCT } from '../actions/product.actions';
 
 const initiaState: ProductState = {
-  availableProducts: PRODUCTS,
-  userProducts: USER_PRODUCTS,
+  availableProducts: [],
+  userProducts: [],
 };
 
 interface ActionType {
   type: string;
   payload: {
     productId: string;
+    products: Product[];
     product: Product;
   };
 }
@@ -53,6 +51,14 @@ export default (state = initiaState, action: ActionType) => {
         ...state,
         userProducts,
         availableProducts,
+      };
+    }
+
+    case SET_PRODUCTS: {
+      return {
+        ...state,
+        availableProducts: action.payload.products,
+        userProducts: action.payload.products,
       };
     }
   }

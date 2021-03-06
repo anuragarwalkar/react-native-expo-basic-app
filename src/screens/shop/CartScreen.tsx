@@ -1,14 +1,16 @@
-import React from 'react';
-import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Button, FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationComponent } from 'react-navigation';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
+import Card from '../../components/shop/Card';
 import CartItem from '../../components/shop/CartItem';
 import Colors from '../../constants/Colors';
 import { OPEN_SANS_BOLD } from '../../constants/Fonts';
 import { removeFromCart } from '../../store/actions/cart.actions';
 import { addOrder } from '../../store/actions/order.actions';
 import RootState from '../../store/rootState.model';
+import globalStyles from '../../utils/globalStyles';
 
 type Props = {
   navigation: NavigationStackProp<{}>;
@@ -16,10 +18,13 @@ type Props = {
 
 const CartScreen: NavigationComponent<{}, {}> = (props: Props) => {
   const { totalAmount, items } = useSelector((state: RootState) => state.cart);
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onOderNowPress = () => {
-    dispatch(addOrder(items, totalAmount));
+  const onOderNowPress = async () => {
+    setIsLoading(true);
+    await dispatch(addOrder(items, totalAmount));
+    setIsLoading(false);
     props.navigation.navigate({ routeName: 'Orders' });
   };
 
@@ -27,14 +32,22 @@ const CartScreen: NavigationComponent<{}, {}> = (props: Props) => {
     dispatch(removeFromCart(id));
   };
 
+  if (isLoading) {
+    return (
+      <View style={globalStyles.absuluteCenter}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.screen}>
-      <View style={styles.summary}>
+      <Card style={styles.summary}>
         <Text style={styles.summaryText}>
           Total: <Text style={styles.amount}>${totalAmount}</Text>
         </Text>
         <Button color={Colors.accent} disabled={items.length === 0} title="Order Now" onPress={onOderNowPress} />
-      </View>
+      </Card>
       <View>
         <FlatList
           data={items}
@@ -57,17 +70,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
     padding: 10,
-    shadowColor: 'black',
-    paddingBottom: 10,
-    shadowOpacity: 0.26,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
   },
   summaryText: {
     fontFamily: OPEN_SANS_BOLD,

@@ -3,8 +3,9 @@ import { loadAsync } from 'expo-font';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
-import { combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import ReduxThunk from 'redux-thunk';
 import { OPEN_SANS, OPEN_SANS_BOLD } from './src/constants/Fonts';
 import ShopNavigator from './src/navigation/ShopNavigator';
 import cartReducer from './src/store/reducers/cart.reducer';
@@ -23,8 +24,12 @@ const fetchFonts = () => {
     [OPEN_SANS_BOLD]: require('./assets/fonts/OpenSans-Bold.ttf'),
   });
 };
+const middlewares = [ReduxThunk];
+const middlewareEnhancer = applyMiddleware(...middlewares);
+const enhancers = [middlewareEnhancer];
+const composedEnhancers = composeWithDevTools(...enhancers);
 
-const state = createStore(rootStore, composeWithDevTools());
+const state = createStore(rootStore, composedEnhancers);
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);

@@ -4,6 +4,7 @@ import { NavigationScreenComponent } from 'react-navigation';
 import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
 import Product from '../../models/Product.class';
 import { isAndroid } from '../../utils/utilityFunctions';
+import Card from './Card';
 
 interface ProductItemProps {
   product: Product;
@@ -13,14 +14,14 @@ interface ProductItemProps {
 
 const ProductItem: NavigationScreenComponent<{}, ProductItemProps> = ({ product, viewDetails, children }) => {
   const products = (
-    <View style={styles.container}>
+    <Card style={styles.container}>
       <Image source={{ uri: product.imageUrl }} style={styles.image} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{product.title}</Text>
         <Text style={styles.price}>${product.price.toFixed(2)}</Text>
       </View>
       <View style={styles.buttons}>{children}</View>
-    </View>
+    </Card>
   );
 
   let content = <TouchableOpacity onPress={viewDetails}>{products}</TouchableOpacity>;
@@ -40,17 +41,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     margin: 10,
     height: 300,
-    shadowColor: 'black',
     paddingBottom: 10,
-    shadowOpacity: 0.26,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    backgroundColor: 'white',
   },
   image: { width: '100%', height: '60%' },
   buttons: {

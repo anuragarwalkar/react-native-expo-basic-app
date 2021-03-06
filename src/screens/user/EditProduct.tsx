@@ -1,14 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { NavigationComponent } from 'react-navigation';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomMenu from '../../components/UI/CustomMenu';
+import Colors from '../../constants/Colors';
 import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
 import Product from '../../models/Product.class';
 import { createProduct, updateProduct } from '../../store/actions/product.actions';
 import RootState from '../../store/rootState.model';
+import globalStyles from '../../utils/globalStyles';
 import { formData, FormData, FormDataItem } from './formData';
 
 const convertObjectToArray = (formValues: FormData): FormDataItem[] =>
@@ -16,10 +26,11 @@ const convertObjectToArray = (formValues: FormData): FormDataItem[] =>
 
 const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenProps) => {
   const productId = props.navigation.getParam('productId');
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
   const [isFormInvalid, setIsFormInvalid] = useState(false);
   const products: Product[] = useSelector((rootState: RootState) => rootState.products.userProducts);
-  let product: Product;
+  let product: any;
+  const [isLoading, setIsLoading] = useState(false);
   const isEditScreen = productId !== undefined;
   let formDataInitialState = formData;
 
@@ -27,7 +38,7 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
     [product] = products.filter(({ id }) => id === productId);
 
     for (let key in formDataInitialState) {
-      const value = product[key as keyof Product];
+      const value = product[key];
       formDataInitialState[key].value = typeof value === 'number' ? value.toString() : value;
     }
   }
@@ -58,7 +69,7 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
   const isAllFormInvalid = () => {
     let isInvalid = false;
     for (let control in formValues) {
-      if (!formValues[control].isValid) {
+      if (!formValues[control].isValid && formValues[control].value === '') {
         isInvalid = true;
         break;
       }
@@ -81,27 +92,28 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
     setFormValues(setText);
   };
 
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     if (isAllFormInvalid()) {
       Alert.alert('Wrong input!', 'Please check the Error message', [{ text: 'ok' }]);
       return;
     }
+    setIsLoading(true);
     const { title, description, price, imageUrl }: FormData = formValues;
 
-    const newProduct = new Product(
-      productId ? productId : new Date().toString(),
-      'u1',
-      title.value,
-      imageUrl.value,
-      description.value,
-      parseInt(price.value)
-    );
+    const newProduct = new Product('u1', title.value, imageUrl.value, description.value, parseInt(price.value));
 
-    if (!isEditScreen) {
-      dispatch(createProduct(newProduct));
-    } else {
-      dispatch(updateProduct(productId, newProduct));
+    try {
+      if (!isEditScreen) {
+        await dispatch(createProduct(newProduct));
+      } else {
+        await dispatch(updateProduct(productId, newProduct));
+      }
+    } catch (error) {
+      console.error('error:', error);
+      setIsLoading(false);
     }
+
+    setIsLoading(false);
 
     props.navigation.goBack();
     setFormValues(formDataInitialState);
@@ -110,6 +122,14 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
   useEffect(() => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
+
+  if (isLoading) {
+    return (
+      <View style={globalStyles.absuluteCenter}>
+        <ActivityIndicator color={Colors.primary} size="large" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView>
