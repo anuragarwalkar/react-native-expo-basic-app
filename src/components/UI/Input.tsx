@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useReducer } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
@@ -34,7 +34,7 @@ const inputReducer = (state: any, action: any) => {
   }
 };
 
-interface inputProps {
+interface inputProps extends TextInputProps {
   initialValue?: string;
   onInputChange: (id?: string, value?: string, isValid?: boolean) => void;
   initiallyValid?: boolean;
@@ -43,7 +43,7 @@ interface inputProps {
   min?: number;
   max?: number;
   minLength?: number;
-  id?: string;
+  id: string;
   label?: string;
   errorText?: string;
 }
