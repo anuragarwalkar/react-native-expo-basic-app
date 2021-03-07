@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 
-const PlaceDetails: NavigationStackScreenComponent = () => {
+const PlaceDetails: NavigationStackScreenComponent = (props) => {
+  const itemId = props.navigation.getParam('id');
   return (
     <View>
       <Text></Text>

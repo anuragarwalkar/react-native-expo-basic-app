@@ -9,19 +9,14 @@ import { selectPlaces } from '../utils/utilityFunctions';
 const PlaceList: NavigationStackScreenComponent = (props) => {
   const places = useSelector(selectPlaces);
 
-  const navigateToPlaceDetails = (title: string) => {
-    props.navigation.navigate({ routeName: 'PlaceDetails', params: { title } });
+  const navigateToPlaceDetails = (title: string, id: string) => {
+    props.navigation.navigate({ routeName: 'PlaceDetails', params: { title, id } });
   };
   return (
     <FlatList
       data={places}
-      renderItem={({ item }) => (
-        <PlaceItem
-          title={item.title}
-          image={null}
-          address={null}
-          onSelect={navigateToPlaceDetails.bind(this, item.title)}
-        />
+      renderItem={({ item: { id, title } }) => (
+        <PlaceItem title={title} image={null} address={null} onSelect={navigateToPlaceDetails.bind(this, title, id)} />
       )}
     />
   );
