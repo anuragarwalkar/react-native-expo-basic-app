@@ -1,13 +1,29 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import { useSelector } from 'react-redux';
+import PlaceItem from '../components/places/PlaceItem';
 import CustomHeaderIcon from '../components/UI/CustomHeaderIcon';
+import { selectPlaces } from '../utils/utilityFunctions';
 
 const PlaceList: NavigationStackScreenComponent = (props) => {
+  const places = useSelector(selectPlaces);
+
+  const navigateToPlaceDetails = (title: string) => {
+    props.navigation.navigate({ routeName: 'PlaceDetails', params: { title } });
+  };
   return (
-    <View>
-      <Text></Text>
-    </View>
+    <FlatList
+      data={places}
+      renderItem={({ item }) => (
+        <PlaceItem
+          title={item.title}
+          image={null}
+          address={null}
+          onSelect={navigateToPlaceDetails.bind(this, item.title)}
+        />
+      )}
+    />
   );
 };
 
