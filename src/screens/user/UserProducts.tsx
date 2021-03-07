@@ -1,7 +1,6 @@
 import React from 'react';
 import { Alert, Button, FlatList } from 'react-native';
-import { NavigationComponent } from 'react-navigation';
-import { NavigationStackScreenProps } from 'react-navigation-stack';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import CustomMenu from '../../components/UI/CustomMenu';
@@ -9,7 +8,7 @@ import Colors from '../../constants/Colors';
 import { deleteProduct } from '../../store/actions/product.actions';
 import RootState from '../../store/rootState.model';
 
-const UserProducts: NavigationComponent<{}, {}> = (props: NavigationStackScreenProps) => {
+const UserProducts: NavigationStackScreenComponent = (props) => {
   const userProducts = useSelector((state: RootState) => state.products.userProducts);
   const dispatch = useDispatch();
   const onEditPress = (productId: string) => {

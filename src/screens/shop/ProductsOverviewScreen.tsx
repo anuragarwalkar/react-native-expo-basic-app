@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, FlatList } from 'react-native';
-import { NavigationComponent } from 'react-navigation';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 import CustomMenu from '../../components/UI/CustomMenu';
@@ -10,13 +9,7 @@ import Product from '../../models/Product.class';
 import { addToCart } from '../../store/actions/cart.actions';
 import RootState from '../../store/rootState.model';
 
-type ProductsOverviewScreenProps = {};
-
-type Props = {
-  navigation: NavigationStackProp<ProductsOverviewScreenProps>;
-};
-
-const ProductsOverviewScreen: NavigationComponent<{}, {}> = ({ navigation }: Props) => {
+const ProductsOverviewScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const availableProducts = useSelector((state: RootState) => state.products.availableProducts);
   const dispatch = useDispatch();
   const onViewDetails = ({ id: productId, title: productTitle }: Product) => {
@@ -38,8 +31,8 @@ const ProductsOverviewScreen: NavigationComponent<{}, {}> = ({ navigation }: Pro
   );
 };
 
-ProductsOverviewScreen.navigationOptions = (navData: any) => {
-  const toggleDrawer = navData.navigation.toggleDrawer;
+ProductsOverviewScreen.navigationOptions = (navData) => {
+  const toggleDrawer = (navData.navigation as any).toggleDrawer;
   return {
     headerRight: () => (
       <CustomMenu title="Cart" icon="cart" onPress={() => navData.navigation.navigate({ routeName: 'Cart' })} />
