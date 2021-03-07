@@ -1,12 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import PlacesNavigator from './src/navigation/PlacesNavigator';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Hello World</Text>
-    </View>
-  );
+  return <PlacesNavigator />;
 }
 
 const styles = StyleSheet.create({
