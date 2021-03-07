@@ -1,4 +1,5 @@
-import { SIGNIN_INIT, SIGNUP_INIT } from '../actions/auth.actions';
+import { deviceStorage } from '../../utils/utilityFunctions';
+import { LOGOUT_INIT, SIGNIN_INIT, SIGNUP_INIT } from '../actions/auth.actions';
 
 export interface AuthState {
   token: string;
@@ -23,6 +24,11 @@ export default (state = initialState, action: { type: string; payload: AuthState
         token,
         expiresIn,
       };
+    }
+
+    case LOGOUT_INIT: {
+      deviceStorage().clearUser();
+      return initialState;
     }
   }
   return state;

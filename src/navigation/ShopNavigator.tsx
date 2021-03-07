@@ -4,6 +4,7 @@ import { LogBox } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createStackNavigator } from 'react-navigation-stack';
+import Logout from '../components/UI/Logout';
 import Colors from '../constants/Colors';
 import { OPEN_SANS_BOLD } from '../constants/Fonts';
 import CartScreen from '../screens/shop/CartScreen';
@@ -105,6 +106,7 @@ const ShopNavigator = createDrawerNavigator(
     contentOptions: {
       activeTintColor: Colors.primary,
     },
+    contentComponent: Logout,
   }
 );
 

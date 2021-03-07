@@ -4,6 +4,7 @@ import { AuthState } from '../reducers/auth.reducer';
 
 export const SIGNUP_INIT = 'SIGNUP_INIT';
 export const SIGNIN_INIT = 'SIGNIN_INIT';
+export const LOGOUT_INIT = 'LOGOUT_INIT';
 
 const apiKey = '';
 const baseUrl = (path: string) => `https://identitytoolkit.googleapis.com/v1/accounts${path}${apiKey}`;
@@ -70,6 +71,7 @@ export const signin = (email: string, password: string) => {
       throw new Error(error.message);
     }
     const expiresIn = getExpiresInDate(resData.expiresIn);
+    console.log('expiresIn:', expiresIn);
     const dispatchItem = {
       type: SIGNIN_INIT,
       payload: {
@@ -88,5 +90,11 @@ export const authenticate = (payload: AuthState) => {
   return {
     type: SIGNIN_INIT,
     payload,
+  };
+};
+
+export const logout = () => {
+  return {
+    type: LOGOUT_INIT,
   };
 };

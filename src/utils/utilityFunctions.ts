@@ -3,8 +3,8 @@ import { Platform } from 'react-native';
 import { AuthState } from '../store/reducers/auth.reducer';
 
 export const getExpiresIn = (time: number | string): number => {
-  const expiresInMs = new Date().getTime() + (typeof time === 'number' ? time : parseInt(time));
-  return expiresInMs * 1000;
+  const expiresInMs = typeof time === 'number' ? time : parseInt(time);
+  return new Date().getTime() + expiresInMs * 1000;
 };
 
 export const getExpiresInDate = (time: number | string): Date => {
@@ -26,6 +26,9 @@ export const deviceStorage = () => {
       } else {
         return null;
       }
+    },
+    clearUser: async () => {
+      return await AsyncStorage.removeItem(userDataKey);
     },
   };
 };

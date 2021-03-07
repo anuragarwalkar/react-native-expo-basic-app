@@ -17,8 +17,9 @@ const StartupScreen: FC<Props> = (props) => {
       .then((res) => {
         if (res) {
           const { expiresIn } = res;
-          const expirationDate = new Date(expiresIn);
-          if (expirationDate <= new Date()) {
+          const expirationDate = expiresIn;
+          if (new Date(expirationDate) <= new Date()) {
+            deviceStorage().clearUser();
             props.navigation.navigate('Auth');
           } else {
             dispatch(authenticate(res));
