@@ -15,8 +15,8 @@ const PlaceList: NavigationStackScreenComponent = (props) => {
   return (
     <FlatList
       data={places}
-      renderItem={({ item: { id, title } }) => (
-        <PlaceItem title={title} image={null} address={null} onSelect={navigateToPlaceDetails.bind(this, title, id)} />
+      renderItem={({ item: { id, title, image } }) => (
+        <PlaceItem title={title} image={image} address={null} onSelect={navigateToPlaceDetails.bind(this, title, id)} />
       )}
     />
   );
