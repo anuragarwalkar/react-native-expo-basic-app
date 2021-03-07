@@ -13,6 +13,7 @@ interface ActionType {
     productId: string;
     products: Product[];
     product: Product;
+    userId: string;
   };
 }
 
@@ -58,7 +59,7 @@ export default (state = initiaState, action: ActionType) => {
       return {
         ...state,
         availableProducts: action.payload.products,
-        userProducts: action.payload.products,
+        userProducts: action.payload.products.filter((product) => product.id === action.payload.userId),
       };
     }
   }

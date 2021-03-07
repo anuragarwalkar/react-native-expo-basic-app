@@ -27,15 +27,21 @@ const convertObjectToArray = (formValues: FormData): FormDataItem[] =>
 const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenProps) => {
   const productId = props.navigation.getParam('productId');
   const dispatch: any = useDispatch();
+
   const [isFormInvalid, setIsFormInvalid] = useState(false);
-  const products: Product[] = useSelector((rootState: RootState) => rootState.products.userProducts);
+  const {
+    products: { userProducts },
+    auth: { userId },
+  } = useSelector((rootState: RootState) => rootState);
   let product: any;
+
   const [isLoading, setIsLoading] = useState(false);
   const isEditScreen = productId !== undefined;
+
   let formDataInitialState = formData;
 
   if (isEditScreen) {
-    [product] = products.filter(({ id }) => id === productId);
+    [product] = userProducts.filter(({ id }) => id === productId);
 
     for (let key in formDataInitialState) {
       const value = product[key];
@@ -100,7 +106,7 @@ const EditProduct: NavigationComponent<{}, {}> = (props: NavigationStackScreenPr
     setIsLoading(true);
     const { title, description, price, imageUrl }: FormData = formValues;
 
-    const newProduct = new Product('u1', title.value, imageUrl.value, description.value, parseInt(price.value));
+    const newProduct = new Product(userId, title.value, imageUrl.value, description.value, parseInt(price.value));
 
     try {
       if (!isEditScreen) {

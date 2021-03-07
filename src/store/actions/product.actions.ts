@@ -1,6 +1,7 @@
 import { Dispatch } from 'react';
 import Product from '../../models/Product.class';
 import { baseUrl } from '../../utils/utilityFunctions';
+import RootState from '../rootState.model';
 
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const CREATE_PRODUCT = 'CREATE_PRODUCT';
@@ -8,23 +9,34 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProduts = () => {
-  return async (dispatch: Dispatch<{}>) => {
-    const response = await fetch(baseUrl('/products.json'));
+  return async (dispatch: Dispatch<{}>, getState: () => RootState) => {
+    let fbRes: any = null;
+    const { token, userId } = getState().auth;
+    try {
+      const response = await fetch(baseUrl('/products.json', token));
+      fbRes = await response.json();
+      if (!response.ok) {
+        throw new Error(fbRes.error);
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
 
-    const fbRes = await response.json();
     const products: Product[] = [];
     if (fbRes) {
       for (const [key, value] of Object.entries(fbRes) as any) {
-        products.push(new Product('u1', value.title, value.imageUrl, value.description, value.price, key));
+        products.push(new Product(userId, value.title, value.imageUrl, value.description, value.price, key));
       }
     }
-    dispatch({ type: SET_PRODUCTS, payload: { products } });
+
+    dispatch({ type: SET_PRODUCTS, payload: { products, userId } });
   };
 };
 
 export const deleteProduct = (productId: string) => {
-  return async (dispatch: Dispatch<{}>) => {
-    await fetch(baseUrl(`/products/${productId}.json`), {
+  return async (dispatch: Dispatch<{}>, getState: () => RootState) => {
+    const token = getState().auth.token;
+    await fetch(baseUrl(`/products/${productId}.json`, token), {
       method: 'DELETE',
     });
 
@@ -36,8 +48,9 @@ export const deleteProduct = (productId: string) => {
 };
 
 export const createProduct = (product: Product) => {
-  return async (dispatch: Dispatch<{}>) => {
-    const response = await fetch(baseUrl('/products.json'), {
+  return async (dispatch: Dispatch<{}>, getState: () => RootState) => {
+    const token = getState().auth.token;
+    const response = await fetch(baseUrl('/products.json', token), {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -59,8 +72,9 @@ export const createProduct = (product: Product) => {
 };
 
 export const updateProduct = (productId: string, product: Product) => {
-  return async (dispatch: Dispatch<{}>) => {
-    await fetch(baseUrl(`/products/${productId}.json`), {
+  return async (dispatch: Dispatch<{}>, getState: () => RootState) => {
+    const token = getState().auth.token;
+    await fetch(baseUrl(`/products/${productId}.json`, token), {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',

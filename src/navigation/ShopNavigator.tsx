@@ -10,6 +10,7 @@ import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
+import StartupScreen from '../screens/UI/StartupScreen';
 import AuthScreen from '../screens/user/AuthScreen';
 import EditProduct from '../screens/user/EditProduct';
 import UserProducts from '../screens/user/UserProducts';
@@ -114,6 +115,7 @@ const AuthNavigator = createStackNavigator({
 });
 
 const MainNavigator = createSwitchNavigator({
+  Startup: StartupScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator,
 });

@@ -1,27 +1,31 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
-import { Button, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Button, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationComponent } from 'react-navigation';
+import { NavigationStackProp } from 'react-navigation-stack';
 import { useDispatch } from 'react-redux';
 import Card from '../../components/shop/Card';
 import Input from '../../components/UI/Input';
 import Colors from '../../constants/Colors';
 import { OPEN_SANS_BOLD } from '../../constants/Fonts';
-import { signup } from '../../store/actions/auth.actions';
+import { signin, signup } from '../../store/actions/auth.actions';
 import globalStyles from '../../utils/globalStyles';
 import { isAndroid } from '../../utils/utilityFunctions';
-
-const AuthScreen: NavigationComponent<{}, {}> = () => {
+type Props = {
+  navigation: NavigationStackProp<{}>;
+};
+const AuthScreen: NavigationComponent<{}, {}> = (props: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignIn, setIsSignIn] = useState(false);
+  const [isSignIn, setIsSignIn] = useState(true);
   const [isEmailVaid, setIsEmailValid] = useState(false);
   const [isPasswordVaid, setIsPasswordValid] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onInputChange = (id: string, value: string, isValid: boolean) => {
-    console.log('id:', id, value, isValid);
     if (id === 'email') {
       setEmail(value);
       setIsEmailValid(isValid);
@@ -31,11 +35,27 @@ const AuthScreen: NavigationComponent<{}, {}> = () => {
     }
   };
 
-  const onSubmit = () => {
-    dispatch(signup(email, password));
+  const onSubmit = async () => {
+    setIsLoading(true);
+    try {
+      setError(null);
+      await dispatch(!isSignIn ? signup(email, password) : signin(email, password));
+      setIsLoading(false);
+      props.navigation.navigate('Shop');
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (error !== null && error !== '') {
+      Alert.alert('Something Went Wrong!', error, [{ text: 'ok' }]);
+    }
+  }, [error]);
+
   return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50} style={{ ...styles.screen }}>
+    <KeyboardAvoidingView style={{ ...styles.screen }}>
       <LinearGradient colors={['#ffedff', '#ffe3ff']} style={styles.gradient}>
         <Card style={{ padding: 15 }}>
           <ScrollView>
@@ -62,18 +82,22 @@ const AuthScreen: NavigationComponent<{}, {}> = () => {
               minLength={5}
             />
             <View style={globalStyles.absuluteCenter}>
-              <View style={{ marginTop: 10, width: 200 }}>
-                <Button title={isSignIn ? 'Login' : 'Signup'} onPress={onSubmit} color={Colors.primary} />
-                <View style={{ marginTop: 10 }}>
-                  <Button
-                    title={isSignIn ? 'Switch To SignUp' : 'Switch To Login'}
-                    onPress={() => {
-                      setIsSignIn((oldState) => !oldState);
-                    }}
-                    color={Colors.accent}
-                  />
+              {isLoading ? (
+                <ActivityIndicator style={{ marginTop: 10, height: 80 }} size="large" color={Colors.accent} />
+              ) : (
+                <View style={{ marginTop: 10, height: 80, width: 200 }}>
+                  <Button title={isSignIn ? 'Login' : 'Signup'} onPress={onSubmit} color={Colors.primary} />
+                  <View style={{ marginTop: 10 }}>
+                    <Button
+                      title={isSignIn ? 'Switch To SignUp' : 'Switch To Login'}
+                      onPress={() => {
+                        setIsSignIn((oldState) => !oldState);
+                      }}
+                      color={Colors.accent}
+                    />
+                  </View>
                 </View>
-              </View>
+              )}
             </View>
           </ScrollView>
         </Card>
