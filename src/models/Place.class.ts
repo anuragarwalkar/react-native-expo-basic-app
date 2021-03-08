@@ -1,3 +1,3 @@
 export default class Place {
-  constructor(public id: string, public title: string, public image: string) {}
+  constructor(public id: number, public title: string, public image: string) {}
 }

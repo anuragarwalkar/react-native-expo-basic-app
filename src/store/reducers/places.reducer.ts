@@ -1,5 +1,5 @@
 import Place from '../../models/Place.class';
-import { ADD_PLACE } from '../actions/places.actions';
+import { ADD_PLACE, FETCH_PLACES, PlacesActions } from '../actions/places.actions';
 
 export interface PlacesState {
   places: Place[];
@@ -8,17 +8,28 @@ const initialState: PlacesState = {
   places: [],
 };
 
-export default (state = initialState, action: { type: string; payload: { title: string; image: string } }) => {
+export default (state = initialState, action: PlacesActions) => {
   switch (action.type) {
     case ADD_PLACE: {
-      const { title, image } = action.payload;
-      const newPlace = new Place(new Date().toString(), title, image);
+      const { title, image, id } = action.payload;
+      const newPlace = new Place(id, title, image);
       return {
         ...state,
         places: [...state.places, newPlace],
       };
     }
-  }
 
-  return state;
+    case FETCH_PLACES: {
+      const { places, length } = action.payload;
+      return {
+        ...state,
+        places,
+        length,
+      };
+    }
+
+    default: {
+      return state;
+    }
+  }
 };
