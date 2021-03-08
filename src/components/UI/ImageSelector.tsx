@@ -17,7 +17,11 @@ const ImageSelector: FC<{ styles?: ViewStyle; onImageSelect: (path: string) => v
   };
   const takeImageHandler = async () => {
     if (verifyPermissions()) {
-      const image: any = await launchCameraAsync();
+      const image: any = await launchCameraAsync({
+        allowsEditing: true,
+        aspect: [16, 9],
+        quality: 0.5,
+      });
       if (!image.cancelled) {
         setTakenImage(image.uri);
         props.onImageSelect(image.uri);
