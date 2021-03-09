@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { LocationObject } from 'expo-location';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useDispatch } from 'react-redux';
+import LocationPicker from '../components/places/LocationPicker';
 import ImageSelector from '../components/UI/ImageSelector';
 import appColors from '../constants/appColors';
 import { addPlace } from '../store/actions/places.actions';
 
 const NewPlace: NavigationStackScreenComponent = ({ navigation }) => {
+  const coordinate = navigation.getParam('coordinate');
   const [value, setValue] = useState('');
   const [imagePath, setImagePath] = useState('');
+  const [location, setLocation] = useState<LocationObject['coords']>();
   const dispatch = useDispatch();
 
   const onTextChangeHandler = (text: string) => {
@@ -17,9 +21,23 @@ const NewPlace: NavigationStackScreenComponent = ({ navigation }) => {
     setValue(text);
   };
 
+  useEffect(() => {
+    if (coordinate) {
+      setLocation(coordinate);
+    }
+  }, [coordinate]);
+
   const savePlaceHandler = () => {
-    dispatch(addPlace(value, imagePath));
-    navigation.goBack();
+    if (location && imagePath && value) {
+      dispatch(addPlace(value, imagePath, location));
+      navigation.goBack();
+    } else {
+      Alert.alert('Invalid Form', 'Please make sure you input all data', [{ text: 'ok' }]);
+    }
+  };
+
+  const onLocationPicked = (coords: LocationObject['coords']) => {
+    setLocation(coords);
   };
 
   return (
@@ -27,8 +45,9 @@ const NewPlace: NavigationStackScreenComponent = ({ navigation }) => {
       <View style={styles.form}>
         <Text style={styles.label}>Title</Text>
         <TextInput style={styles.textInput} value={value} onChangeText={onTextChangeHandler} />
-        <ImageSelector styles={{ marginTop: 20 }} onImageSelect={setImagePath} />
-        <View style={{ marginTop: 20 }}>
+        <ImageSelector styles={{ marginVertical: 20 }} onImageSelect={setImagePath} />
+        <LocationPicker onLocationPicked={onLocationPicked} />
+        <View style={{ marginTop: 10 }}>
           <Button title="Save Place" color={appColors.primary} onPress={savePlaceHandler} />
         </View>
       </View>

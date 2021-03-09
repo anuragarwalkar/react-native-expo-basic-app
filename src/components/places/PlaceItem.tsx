@@ -14,7 +14,7 @@ const PlaceItem: FC<PlaceItemProps> = (props) => {
       {props.image && <Image style={styles.image} source={{ uri: props.image }} />}
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.address}>{props.address}</Text>
+        <Text style={styles.address}>{props.address ? props.address : 'Mangal Bhairav, Nande City, Pune'}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -1,4 +1,5 @@
 import { documentDirectory, moveAsync } from 'expo-file-system';
+import { LocationObject } from 'expo-location';
 import { SQLResultSet } from 'expo-sqlite';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
@@ -26,10 +27,13 @@ interface FetchPlacesAction {
   };
 }
 
-export const addPlace = (title: string, image: string): ThunkAction<void, RootState, unknown, Action<string>> => {
+export const addPlace = (
+  title: string,
+  image: string,
+  coords: LocationObject['coords']
+): ThunkAction<void, RootState, unknown, Action<string>> => {
   return async (dispatch) => {
     const fileName = image.split('/').pop();
-    console.log('documentDirectory:', documentDirectory);
     const newPath = documentDirectory + (fileName ? fileName : '');
     let dbRes: SQLResultSet;
     try {
@@ -40,7 +44,7 @@ export const addPlace = (title: string, image: string): ThunkAction<void, RootSt
         });
       }
 
-      dbRes = await insertPlace(title, newPath, 'Nanded City', 15.6, 14.6);
+      dbRes = await insertPlace(title, newPath, 'Nanded City', coords.latitude, coords.longitude);
     } catch (error) {
       console.log('error:', error);
       throw new Error(error.message);

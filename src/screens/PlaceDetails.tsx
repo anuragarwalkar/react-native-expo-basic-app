@@ -7,7 +7,7 @@ interface PlaceDetailsParams {
   title: string;
 }
 
-const PlaceDetails: NavigationStackScreenComponent<PlaceDetailsParams> = (props) => {
+const PlaceDetails: NavigationStackScreenComponent = (props) => {
   const itemId = props.navigation.getParam('id');
   return (
     <View>
