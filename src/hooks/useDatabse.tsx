@@ -8,7 +8,7 @@ const useDatabse = (): [boolean] => {
     init()
       .then(async (res) => {
         serDbInitialized(true);
-        console.log('sql-lite:', '%c Database Connected', 'color: red');
+        console.log('sql-lite:', 'Database Connected');
       })
       .catch((err) => {
         serDbInitialized(true);
