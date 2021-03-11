@@ -1,111 +1,90 @@
 import { Ionicons } from '@expo/vector-icons';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { LogBox } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import { createStackNavigator } from 'react-navigation-stack';
 import Colors from '../constants/Colors';
-import { OPEN_SANS_BOLD } from '../constants/Fonts';
 import CartScreen from '../screens/shop/CartScreen';
-import OrdersScreen from '../screens/shop/OrdersScreen';
-import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
-import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
-import EditProduct from '../screens/user/EditProduct';
+import OrdersScreen, { ordersNavigationOptions } from '../screens/shop/OrdersScreen';
+import ProductDetailsScreen, { productDetailsNavigationOptions } from '../screens/shop/ProductDetailsScreen';
+import ProductsOverviewScreen, { productsNavigationOptions } from '../screens/shop/ProductsOverviewScreen';
+import EditProduct, { editProductNavigationOptions } from '../screens/user/EditProduct';
 import UserProducts from '../screens/user/UserProducts';
 import { isAndroid } from '../utils/utilityFunctions';
+import { defaultNavigationOptions } from './NavigationDef';
 
-const defaultNavigationOptions = {
-  headerStyle: {
-    backgroundColor: isAndroid ? Colors.primary : '',
-  },
-  headerTitleStyle: {
-    fontFamily: OPEN_SANS_BOLD,
-  },
-  headerTintColor: isAndroid ? 'white' : Colors.primary,
+const ProductsStackNavigator = createStackNavigator();
+const OrdersStackNavigator = createStackNavigator();
+const AdminStackNavigator = createStackNavigator();
+const DefaultDrawerNavigator = createDrawerNavigator();
+
+export const ProductsNavigator = () => {
+  return (
+    <ProductsStackNavigator.Navigator screenOptions={defaultNavigationOptions}>
+      <ProductsStackNavigator.Screen
+        name="ProductOverview"
+        options={productsNavigationOptions}
+        component={ProductsOverviewScreen}
+      />
+      <ProductsStackNavigator.Screen
+        name="ProductDetails"
+        options={productDetailsNavigationOptions}
+        component={ProductDetailsScreen}
+      />
+      <ProductsStackNavigator.Screen name="Cart" component={CartScreen} />
+    </ProductsStackNavigator.Navigator>
+  );
 };
 
-const ProductsNavigator = createStackNavigator(
-  {
-    ProductsOverview: {
-      screen: ProductsOverviewScreen,
-      navigationOptions: {
-        headerTitle: 'All Products',
-      },
-    },
-    ProductDetails: {
-      screen: ProductDetailsScreen,
-    },
-    Cart: {
-      screen: CartScreen,
-    },
+const OrdersNavigator = () => {
+  return (
+    <OrdersStackNavigator.Navigator screenOptions={defaultNavigationOptions}>
+      <OrdersStackNavigator.Screen name="Orders" options={ordersNavigationOptions} component={OrdersScreen} />
+    </OrdersStackNavigator.Navigator>
+  );
+};
+
+const AdminNavigator = () => {
+  return (
+    <AdminStackNavigator.Navigator screenOptions={defaultNavigationOptions}>
+      <AdminStackNavigator.Screen name="Products" options={productDetailsNavigationOptions} component={UserProducts} />
+      <AdminStackNavigator.Screen name="EditProduct" options={editProductNavigationOptions} component={EditProduct} />
+    </AdminStackNavigator.Navigator>
+  );
+};
+
+const ProductsNavigationDrawer = {
+  drawerLabel: 'Products',
+  drawerIcon: (drawerConfig: any) => {
+    return <Ionicons name={isAndroid ? 'md-cart' : 'ios-cart'} size={23} color={drawerConfig.tintColor} />;
   },
-  {
-    defaultNavigationOptions,
-  }
-);
+};
 
-const OrdersNavigator = createStackNavigator(
-  {
-    Orders: {
-      screen: OrdersScreen,
-    },
+const OrdersNavigatorDrawerOptions = {
+  drawerLabel: 'Orders',
+  drawerIcon: (drawerConfig: any) => {
+    return <Ionicons name={isAndroid ? 'md-list' : 'ios-list'} size={23} color={drawerConfig.tintColor} />;
   },
-  {
-    defaultNavigationOptions,
-  }
-);
+};
 
-const AdminNavigator = createStackNavigator(
-  {
-    Admin: {
-      screen: UserProducts,
-    },
-    EditProduct: {
-      screen: EditProduct,
-    },
+const AdminNavigatiorDrawerOptions = {
+  drawerLabel: 'Admin*',
+  drawerIcon: (drawerConfig: any) => {
+    return <Ionicons name={isAndroid ? 'md-create' : 'ios-create'} size={23} color={drawerConfig.tintColor} />;
   },
-  {
-    defaultNavigationOptions,
-  }
-);
+};
 
-const DrawerNavigator = createDrawerNavigator(
-  {
-    Products: {
-      screen: ProductsNavigator,
-      navigationOptions: {
-        drawerLabel: 'Products',
-        drawerIcon: (drawerConfig) => {
-          return <Ionicons name={isAndroid ? 'md-cart' : 'ios-cart'} size={23} color={drawerConfig.tintColor} />;
-        },
-      },
-    },
-    Orders: {
-      screen: OrdersNavigator,
-      navigationOptions: {
-        drawerLabel: 'Orders',
-        drawerIcon: (drawerConfig) => {
-          return <Ionicons name={isAndroid ? 'md-list' : 'ios-list'} size={23} color={drawerConfig.tintColor} />;
-        },
-      },
-    },
-    Admin: {
-      screen: AdminNavigator,
-      navigationOptions: {
-        drawerLabel: 'Admin*',
-        drawerIcon: (drawerConfig) => {
-          return <Ionicons name={isAndroid ? 'md-create' : 'ios-create'} size={23} color={drawerConfig.tintColor} />;
-        },
-      },
-    },
-  },
-  {
-    contentOptions: {
-      activeTintColor: Colors.primary,
-    },
-  }
-);
+const defaultDrawerNavigatorOptions = {
+  activeTintColor: Colors.primary,
+};
 
-LogBox.ignoreLogs(['Your project is accessing the following APIs']);
+const DrawerNavigator = () => {
+  return (
+    <DefaultDrawerNavigator.Navigator drawerContentOptions={defaultDrawerNavigatorOptions}>
+      <DefaultDrawerNavigator.Screen name="Products" options={ProductsNavigationDrawer} component={ProductsNavigator} />
+      <DefaultDrawerNavigator.Screen name="Orders" options={OrdersNavigatorDrawerOptions} component={OrdersNavigator} />
+      <DefaultDrawerNavigator.Screen name="Admin" options={AdminNavigatiorDrawerOptions} component={AdminNavigator} />
+    </DefaultDrawerNavigator.Navigator>
+  );
+};
 
-export default createAppContainer(DrawerNavigator);
+export default DrawerNavigator;

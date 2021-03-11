@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { NavigationStackScreenComponent, NavigationStackScreenProps } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomMenu from '../../components/UI/CustomMenu';
 import { OPEN_SANS, OPEN_SANS_BOLD } from '../../constants/Fonts';
@@ -13,8 +12,8 @@ import { formData, FormData, FormDataItem } from './formData';
 const convertObjectToArray = (formValues: FormData): FormDataItem[] =>
   Object.values(formValues).sort((a, b) => (a.id < b.id ? -1 : 1));
 
-const EditProduct: NavigationStackScreenComponent = (props) => {
-  const productId = props.navigation.getParam('productId');
+const EditProduct: any = (props: any) => {
+  const productId = props.route.params.productId;
   const dispatch = useDispatch();
   const [isFormInvalid, setIsFormInvalid] = useState(false);
   const products: Product[] = useSelector((rootState: RootState) => rootState.products.userProducts);
@@ -106,8 +105,12 @@ const EditProduct: NavigationStackScreenComponent = (props) => {
     setFormValues(formDataInitialState);
   }, [formValues]);
 
+  const headerOptions = {
+    headerRight: () => <CustomMenu title="Checkmark" icon="checkmark" onPress={submitHandler} />,
+  };
+
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    props.navigation.setOptions(headerOptions);
   }, [submitHandler]);
 
   return (
@@ -137,14 +140,12 @@ const EditProduct: NavigationStackScreenComponent = (props) => {
   );
 };
 
-EditProduct.navigationOptions = (navData: NavigationStackScreenProps) => {
-  const productId = navData.navigation.getParam('productId');
-  const submit = navData.navigation.getParam('submit');
+export const editProductNavigationOptions = (navData: any) => {
+  const productId = navData.route.params && navData.route.params.productId;
 
   const title = productId ? 'Edit' : 'New';
   return {
     headerTitle: `${title} Product`,
-    headerRight: () => <CustomMenu title="Checkmark" icon="checkmark" onPress={submit} />,
   };
 };
 

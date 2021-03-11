@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { OPEN_SANS, OPEN_SANS_BOLD } from './src/constants/Fonts';
-import ShopNavigator from './src/navigation/ShopNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
 import cartReducer from './src/store/reducers/cart.reducer';
 import ordersReducer from './src/store/reducers/orders.reducer';
 import productReducer from './src/store/reducers/product.reducer';
@@ -44,7 +44,7 @@ export default function App() {
   }
   return (
     <Provider store={state}>
-      <ShopNavigator />
+      <AppNavigator />
     </Provider>
   );
 }

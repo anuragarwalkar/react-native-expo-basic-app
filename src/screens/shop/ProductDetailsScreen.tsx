@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
 import Product from '../../models/Product.class';
 import { addToCart } from '../../store/actions/cart.actions';
 import RootState from '../../store/rootState.model';
 
-const ProductDetailsScreen: NavigationStackScreenComponent = (props) => {
-  const productId = props.navigation.getParam('productId');
+const ProductDetailsScreen: any = (props: any) => {
+  const productId = props.route.params.productId;
   const product = useSelector((state: RootState) =>
     state.products.availableProducts.find((prod) => productId === prod.id)
   );
@@ -33,8 +32,8 @@ const ProductDetailsScreen: NavigationStackScreenComponent = (props) => {
   );
 };
 
-ProductDetailsScreen.navigationOptions = (props) => {
-  const headerTitle = props.navigation.getParam('productTitle');
+export const productDetailsNavigationOptions = (props: any) => {
+  const headerTitle = props.route.params && props.route.params.productTitle;
 
   return {
     headerTitle,
