@@ -5,6 +5,7 @@ export default class Product {
     public imageUrl: string,
     public description: string,
     public price: number,
-    public id?: string
+    public id?: string,
+    public pushToken?: string
   ) {}
 }

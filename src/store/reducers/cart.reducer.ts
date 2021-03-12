@@ -23,7 +23,7 @@ const defaultSorting = (a: CartItem, b: CartItem) => (a.id > b.id ? 1 : -1);
 export default (state = initialState, action: action): CartState => {
   switch (action.type) {
     case ADD_TO_CART: {
-      const { title, id, price } = action.payload.product;
+      const { title, id, price, pushToken } = action.payload.product;
       const oldItems = [...state.items];
       const oldItemIndex = oldItems.findIndex((item) => item.id === id);
       const quantity = oldItemIndex >= 0 ? oldItems[oldItemIndex].quantity + 1 : 1;
@@ -31,7 +31,7 @@ export default (state = initialState, action: action): CartState => {
         oldItems.splice(oldItemIndex, 1);
       }
       const sum = price * quantity;
-      const items = [...oldItems, new CartItem(id, price, title, quantity, sum)];
+      const items = [...oldItems, new CartItem(id as string, pushToken as string, price, title, quantity, sum)];
       const totalAmount = items.reduce((prev, { sum: oldSum }) => prev + oldSum, 0);
       const newState = { ...state, items, totalAmount };
       items.sort(defaultSorting);

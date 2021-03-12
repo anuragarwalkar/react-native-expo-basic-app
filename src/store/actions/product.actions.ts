@@ -1,6 +1,8 @@
+import { getExpoPushTokenAsync } from 'expo-notifications';
+import { NOTIFICATIONS } from 'expo-permissions';
 import { Dispatch } from 'react';
 import Product from '../../models/Product.class';
-import { baseUrl } from '../../utils/utilityFunctions';
+import { baseUrl, getPermissions } from '../../utils/utilityFunctions';
 import RootState from '../rootState.model';
 
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
@@ -25,7 +27,9 @@ export const fetchProduts = () => {
     const products: Product[] = [];
     if (fbRes) {
       for (const [key, value] of Object.entries(fbRes) as any) {
-        products.push(new Product(userId, value.title, value.imageUrl, value.description, value.price, key));
+        products.push(
+          new Product(userId, value.title, value.imageUrl, value.description, value.price, key, value.pushToken)
+        );
       }
     }
 
@@ -49,13 +53,21 @@ export const deleteProduct = (productId: string) => {
 
 export const createProduct = (product: Product) => {
   return async (dispatch: Dispatch<{}>, getState: () => RootState) => {
+    const expo = { pushToken: '' };
+    const res = await getPermissions(NOTIFICATIONS);
+    if (res) {
+      const { data } = await getExpoPushTokenAsync();
+      console.log('data:', data);
+      expo.pushToken = data;
+    }
     const token = getState().auth.token;
+    const { pushToken } = expo;
     const response = await fetch(baseUrl('/products.json', token), {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify({ ...product, pushToken }),
     });
 
     const fbRes = await response.json();

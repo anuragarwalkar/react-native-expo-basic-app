@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import CartItem from '../../models/CartItem';
 import Order from '../../models/Order.class';
-import { baseUrl } from '../../utils/utilityFunctions';
+import { baseUrl, sendNotificationByToken } from '../../utils/utilityFunctions';
 import RootState from '../rootState.model';
 
 export const ADD_ORDER = 'ADD_ORDER';
@@ -56,6 +56,16 @@ export const addOrder = (orders: CartItem[], totalAmount: number) => {
     } catch (error) {
       throw new Error(error.message);
     }
+    orders.forEach(async (order) => {
+      if (order.pushToken) {
+        const res = await sendNotificationByToken(order.pushToken, {
+          title: `New Order Receiveed For ${order.productTitle}`,
+          message: `Qty: ${order.quantity}, Price: ${order.sum}`,
+        });
+
+        console.log('Notification Sent Res:', res);
+      }
+    });
 
     dispatch({
       type: ADD_ORDER,

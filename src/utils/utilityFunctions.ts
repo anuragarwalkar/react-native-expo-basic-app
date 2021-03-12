@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { askAsync, getAsync, PermissionType } from 'expo-permissions';
 import { Platform } from 'react-native';
 import { AuthState } from '../store/reducers/auth.reducer';
 
@@ -37,3 +38,46 @@ export const isAndroid = Platform.OS === 'android';
 
 export const baseUrl = (path: string, token: string) =>
   `https://shopping-app-cd1ae-default-rtdb.firebaseio.com${path}?auth=${token}`;
+
+export const getPermissions = (permissionType: PermissionType) => {
+  return getAsync(permissionType)
+    .then((permission) => {
+      if (permission.status !== 'granted') {
+        return askAsync(permissionType);
+      } else {
+        return permission;
+      }
+    })
+    .then((permission) => {
+      if (permission.status !== 'granted') {
+        return false;
+      } else {
+        return true;
+      }
+    });
+};
+
+export const sendNotificationByToken = async (
+  token: string,
+  { title, message }: { title: string; message: string }
+) => {
+  try {
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-Encoding': 'gzip, deflate',
+        'content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: token,
+        title,
+        body: message,
+      }),
+    });
+
+    return true;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
